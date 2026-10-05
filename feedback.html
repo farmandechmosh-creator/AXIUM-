@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AXIUM · Feedback</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,system-ui,sans-serif}
+body{min-height:100vh;background:radial-gradient(120% 90% at 50% 0%,#0c1424,#070b12 60%);display:flex;align-items:center;justify-content:center;padding:20px;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(43,125,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(43,125,255,.05) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
+.fb-card{position:relative;width:100%;max-width:440px;background:rgba(255,255,255,.04);border:1px solid rgba(43,125,255,.3);border-radius:24px;padding:32px 26px;backdrop-filter:blur(14px);box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 40px rgba(43,125,255,.12);text-align:center}
+.fb-logo{font-size:1.6rem;font-weight:900;letter-spacing:6px;background:linear-gradient(90deg,#fff,#7bb5ff,#00c2d6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.fb-title{color:#eef2f7;font-size:1.15rem;font-weight:800;margin-top:14px}
+.fb-sub{color:#8a94a3;font-size:.75rem;margin-top:6px;line-height:1.6}
+.fb-stars{display:flex;justify-content:center;gap:10px;margin:22px 0 6px}
+.fb-stars button{background:none;border:none;font-size:2rem;cursor:pointer;filter:grayscale(1) opacity(.35);transition:all .25s cubic-bezier(.34,1.56,.64,1)}
+.fb-stars button.on{filter:none;transform:scale(1.15);text-shadow:0 0 18px rgba(255,200,60,.7)}
+.fb-stars button:hover{transform:scale(1.25)}
+.fb-lbl{color:#7bb5ff;font-size:.68rem;font-weight:700;letter-spacing:2px;min-height:16px}
+.fb-card input,.fb-card textarea{width:100%;margin-top:14px;padding:13px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.3);color:#eef2f7;font-size:.85rem;outline:none;transition:border .25s}
+.fb-card input:focus,.fb-card textarea:focus{border-color:rgba(43,125,255,.6);box-shadow:0 0 0 3px rgba(43,125,255,.15)}
+.fb-card textarea{min-height:110px;resize:vertical}
+.fb-send{width:100%;margin-top:18px;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,#2b7dff,#1a6ae0);color:#fff;font-weight:800;font-size:.9rem;letter-spacing:1px;cursor:pointer;box-shadow:0 10px 26px rgba(43,125,255,.4);transition:transform .2s}
+.fb-send:active{transform:scale(.97)}
+.fb-send:disabled{opacity:.6}
+.fb-back{display:inline-block;margin-top:16px;color:#7bb5ff;font-size:.72rem;text-decoration:none;font-weight:700}
+.fb-ok{display:none;padding:30px 0}
+.fb-ok .big{font-size:3rem}
+.fb-ok h3{color:#3fd67a;margin-top:10px;font-size:1.1rem}
+.fb-ok p{color:#8a94a3;font-size:.75rem;margin-top:8px;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="fb-card">
+  <div id="fbForm">
+    <div class="fb-logo">AXIUM</div>
+    <div class="fb-title">Your voice shapes AXIUM ✨</div>
+    <div class="fb-sub">Tell us what you love, what confuses you, and what we should build next.</div>
+    <div class="fb-stars" id="fbStars">
+      <button type="button" data-v="1">⭐</button><button type="button" data-v="2">⭐</button><button type="button" data-v="3">⭐</button><button type="button" data-v="4">⭐</button><button type="button" data-v="5">⭐</button>
+    </div>
+    <div class="fb-lbl" id="fbLbl">TAP TO RATE</div>
+    <input id="fbName" type="text" placeholder="Your name (optional)">
+    <textarea id="fbMsg" placeholder="Write your feedback here..."></textarea>
+    <button class="fb-send" id="fbSend">SEND FEEDBACK 💌</button>
+    <a class="fb-back" href="index.html">← Back to AXIUM</a>
+  </div>
+  <div class="fb-ok" id="fbOk">
+    <div class="big">💚</div>
+    <h3>Thank you!</h3>
+    <p>Your feedback reached the creator directly.<br>Every word makes AXIUM better.</p>
+    <a class="fb-back" href="index.html">← Back to AXIUM</a>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+/* ===== این ۳ مقدار رو از index.html خودت کپی کن ===== */
+var FB_SERVICE='SERVICE_ID_TO';      /* مثل: service_xxxxx */
+var FB_TEMPLATE='TEMPLATE_ID_TO';    /* قالب جدید بازخورد */
+var FB_KEY='PUBLIC_KEY_TO';          /* مثل: abc123... */
+emailjs.init(FB_KEY);
+var rating=0;
+var lbls=['','Not good 😕','Could be better 🙂','Good 👍','Great 😍','Amazing 🤩'];
+document.getElementById('fbStars').addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  rating=+b.dataset.v;
+  document.querySelectorAll('#fbStars button').forEach(function(s,i){s.classList.toggle('on',i<rating);});
+  document.getElementById('fbLbl').textContent=lbls[rating];
+});
+document.getElementById('fbSend').onclick=function(){
+  var msg=document.getElementById('fbMsg').value.trim();
+  if(!msg){document.getElementById('fbMsg').focus();return;}
+  if(!rating){document.getElementById('fbLbl').textContent='PLEASE RATE FIRST ⭐';return;}
+  var btn=this;btn.disabled=true;btn.textContent='SENDING...';
+  emailjs.send(FB_SERVICE,FB_TEMPLATE,{
+    fb_name:document.getElementById('fbName').value.trim()||'Anonymous',
+    fb_stars:rating+' / 5',
+    fb_msg:msg,
+    fb_date:new Date().toLocaleString()
+  }).then(function(){
+    document.getElementById('fbForm').style.display='none';
+    document.getElementById('fbOk').style.display='block';
+  }).catch(function(){
+    btn.disabled=false;btn.textContent='SEND FEEDBACK 💌';
+    alert('Send failed — please try again or email farmande.chmosh@gmail.com');
+  });
+};
+</script>
+</body>
+</html>
