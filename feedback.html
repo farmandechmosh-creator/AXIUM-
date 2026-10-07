@@ -54,10 +54,11 @@ body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>
-/* ===== این ۳ مقدار رو از index.html خودت کپی کن ===== */
-var FB_SERVICE='SERVICE_ID_TO';      /* مثل: service_xxxxx */
-var FB_TEMPLATE='TEMPLATE_ID_TO';    /* قالب جدید بازخورد */
-var FB_KEY='PUBLIC_KEY_TO';          /* مثل: abc123... */
+/* ========== AXIUM FEEDBACK CONFIG ========== */
+var FB_SERVICE='service_e2lf58f';
+var FB_TEMPLATE='template_1wdgmvm';
+var FB_KEY='UJINCMLMSWSTFP6KPPRZW2A2PZ75A3NZCMFRQJFBDUQ4XOO5TK67U74BCJKWBC6G';
+/* ============================================= */
 emailjs.init(FB_KEY);
 var rating=0;
 var lbls=['','Not good 😕','Could be better 🙂','Good 👍','Great 😍','Amazing 🤩'];
@@ -82,7 +83,7 @@ document.getElementById('fbSend').onclick=function(){
     document.getElementById('fbOk').style.display='block';
   }).catch(function(){
     btn.disabled=false;btn.textContent='SEND FEEDBACK 💌';
-    alert('Send failed — please try again or email farmande.chmosh@gmail.com');
+    alert('Send failed — please try again');
   });
 };
 </script>
