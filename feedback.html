@@ -54,11 +54,9 @@ body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>
-/* ========== AXIUM FEEDBACK CONFIG ========== */
 var FB_SERVICE='service_e2lf58f';
 var FB_TEMPLATE='template_1wdgmvm';
 var FB_KEY='diSH1ZxZJM2-3sKdy';
-/* ============================================= */
 emailjs.init(FB_KEY);
 var rating=0;
 var lbls=['','Not good 😕','Could be better 🙂','Good 👍','Great 😍','Amazing 🤩'];
@@ -83,7 +81,7 @@ document.getElementById('fbSend').onclick=function(){
     document.getElementById('fbOk').style.display='block';
   }).catch(function(err){
     btn.disabled=false;btn.textContent='SEND FEEDBACK 💌';
-    alert('ERROR: '+(err&&err.text?err.text:(err&&err.status?err.status:JSON.stringify(err))));
+    alert('ERROR: '+(err&&err.text?err.text:JSON.stringify(err)));
   });
 };
 </script>
