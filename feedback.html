@@ -54,7 +54,7 @@ body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>
-var FB_SERVICE='service_e2lf58f';
+var FB_SERVICES=['service_e2lf58f','service_e21f58f'];
 var FB_TEMPLATE='template_1wdgmvm';
 var FB_KEY='diSH1ZxZJM2-3sKdy';
 emailjs.init(FB_KEY);
@@ -66,22 +66,33 @@ document.getElementById('fbStars').addEventListener('click',function(e){
   document.querySelectorAll('#fbStars button').forEach(function(s,i){s.classList.toggle('on',i<rating);});
   document.getElementById('fbLbl').textContent=lbls[rating];
 });
+function fbOK(){
+  document.getElementById('fbForm').style.display='none';
+  document.getElementById('fbOk').style.display='block';
+}
+function fbFail(btn,err){
+  btn.disabled=false;btn.textContent='SEND FEEDBACK 💌';
+  alert('ERROR: '+(err&&err.text?err.text:JSON.stringify(err)));
+}
+function fbTry(sid,params){
+  return emailjs.send(sid,FB_TEMPLATE,params);
+}
 document.getElementById('fbSend').onclick=function(){
   var msg=document.getElementById('fbMsg').value.trim();
   if(!msg){document.getElementById('fbMsg').focus();return;}
   if(!rating){document.getElementById('fbLbl').textContent='PLEASE RATE FIRST ⭐';return;}
   var btn=this;btn.disabled=true;btn.textContent='SENDING...';
-  emailjs.send(FB_SERVICE,FB_TEMPLATE,{
+  var params={
     fb_name:document.getElementById('fbName').value.trim()||'Anonymous',
     fb_stars:rating+' / 5',
     fb_msg:msg,
     fb_date:new Date().toLocaleString()
-  }).then(function(){
-    document.getElementById('fbForm').style.display='none';
-    document.getElementById('fbOk').style.display='block';
-  }).catch(function(err){
-    btn.disabled=false;btn.textContent='SEND FEEDBACK 💌';
-    alert('ERROR: '+(err&&err.text?err.text:JSON.stringify(err)));
+  };
+  fbTry(FB_SERVICES[0],params).then(fbOK).catch(function(err){
+    if(err&&err.text&&/service ID not found/i.test(err.text)){
+      return fbTry(FB_SERVICES[1],params).then(fbOK).catch(function(e2){fbFail(btn,e2);});
+    }
+    fbFail(btn,err);
   });
 };
 </script>
