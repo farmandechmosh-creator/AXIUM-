@@ -52,8 +52,12 @@ body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(
     <a class="fb-back" href="index.html">← Back to AXIUM</a>
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>
-var FB_EMAIL='farmande.chmosh@gmail.com';
+var FB_SERVICE='service_e2if58f';
+var FB_TEMPLATE='template_1wdgmvm';
+var FB_KEY='diSH1ZxZJM2-3sKdy';
+emailjs.init(FB_KEY);
 var rating=0;
 var lbls=['','Not good 😕','Could be better 🙂','Good 👍','Great 😍','Amazing 🤩'];
 document.getElementById('fbStars').addEventListener('click',function(e){
@@ -67,22 +71,17 @@ document.getElementById('fbSend').onclick=function(){
   if(!msg){document.getElementById('fbMsg').focus();return;}
   if(!rating){document.getElementById('fbLbl').textContent='PLEASE RATE FIRST ⭐';return;}
   var btn=this;btn.disabled=true;btn.textContent='SENDING...';
-  fetch('https://formsubmit.co/ajax/'+FB_EMAIL,{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify({
-      _subject:'⭐ New AXIUM Feedback ('+rating+'/5)',
-      Name:document.getElementById('fbName').value.trim()||'Anonymous',
-      Rating:rating+' / 5',
-      Message:msg,
-      Date:new Date().toLocaleString()
-    })
-  }).then(function(r){return r.json();}).then(function(){
+  emailjs.send(FB_SERVICE,FB_TEMPLATE,{
+    fb_name:document.getElementById('fbName').value.trim()||'Anonymous',
+    fb_stars:rating+' / 5',
+    fb_msg:msg,
+    fb_date:new Date().toLocaleString()
+  }).then(function(){
     document.getElementById('fbForm').style.display='none';
     document.getElementById('fbOk').style.display='block';
   }).catch(function(err){
     btn.disabled=false;btn.textContent='SEND FEEDBACK 💌';
-    alert('ERROR: '+(err&&err.message?err.message:err));
+    alert('ERROR: '+(err&&err.text?err.text:JSON.stringify(err)));
   });
 };
 </script>
