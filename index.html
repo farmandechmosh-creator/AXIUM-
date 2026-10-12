@@ -2626,5 +2626,27 @@ push('🧠',TITLES[st.coachIdx%TITLES.length],body);
   syncFab(); render();
 })();
 </script>
+  <!-- ===== AXIUM PANEL CLOSE BUTTON ===== -->
+<style>
+#axClose{width:34px;height:34px;flex:none;border-radius:11px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#9aa4b2;font-size:.95rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.25s;margin-left:8px}
+#axClose:active{transform:scale(.85) rotate(90deg);color:#ff5470;border-color:rgba(255,84,112,.5)}
+</style>
+<script>
+(function(){
+  var head=document.querySelector('.axn-head');
+  var panel=document.getElementById('axPanel');
+  if(head&&panel&&!document.getElementById('axClose')){
+    var x=document.createElement('button');
+    x.id='axClose'; x.type='button'; x.textContent='✕';
+    x.onclick=function(){ panel.classList.remove('open'); };
+    head.appendChild(x);
+  }
+  document.addEventListener('click',function(e){
+    if(panel&&panel.classList.contains('open')&&!panel.contains(e.target)&&!e.target.closest('#axFab')){
+      panel.classList.remove('open');
+    }
+  });
+})();
+</script>
 </body>
   </html>
