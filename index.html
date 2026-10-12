@@ -2605,22 +2605,25 @@ var f=document.querySelector('link[data-axfonts]');if(f)f.remove();
     var i=st.coachIdx%p.length; st.coachIdx=i+1;
     var body=p[i];
     if(st.rems.length) body+=' (PS: you have '+st.rems.length+' reminder(s) waiting ⏰)';
-    push('🧠',TITLES[st.coachIdx%TITLES.length],body);
+push('🧠',TITLES[st.coachIdx%TITLES.length],body);
     st.lastCoach=Date.now(); save();
   }
-  document.querySelectorAll('.axn-chip[data-coach]').forEach(function(ch){ ch.onclick=coachPush; });
-  if(!st.lastCoach) st.lastCoach=Date.now();
-  setInterval(function(){
-    if(st.coachOn&&Date.now()-st.lastCoach>=20*60000) coachPush();
-  },15000);
-  var today=new Date().toDateString();
-  if(st.sumOn&&st.lastSum!==today){
-    st.lastSum=today; save();
-    var h=new Date().getHours();
-    var g=h<12?'Good morning ☀️':(h<17?'Good afternoon 🌤':'Good evening 🌙');
-    push('🌅',g,'Welcome back! I\'ll check in every 20 minutes. You have '+st.rems.length+' reminder(s) active. Let\'s make today count!');
+  if(!window.__axCoachArmed){
+    window.__axCoachArmed=true;
+    document.querySelectorAll('.axn-chip[data-coach]').forEach(function(ch){ ch.onclick=coachPush; });
+    if(!st.lastCoach) st.lastCoach=Date.now();
+    setInterval(function(){
+      if(st.coachOn&&Date.now()-st.lastCoach>=20*60000) coachPush();
+    },15000);
+    var today=new Date().toDateString();
+    if(st.sumOn&&st.lastSum!==today){
+      st.lastSum=today; save();
+      var h=new Date().getHours();
+      var g=h<12?'Good morning ☀️':(h<17?'Good afternoon 🌤':'Good evening 🌙');
+      push('🌅',g,'Welcome back! I\'ll check in every 20 minutes. You have '+st.rems.length+' reminder(s) active. Let\'s make today count!');
+    }
   }
-  render();
+  syncFab(); render();
 })();
 </script>
 </body>
