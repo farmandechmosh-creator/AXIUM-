@@ -1,3 +1,4 @@
+(function(){var s=document.createElement('script');s.src='coach.js?v='+Date.now();(document.head||document.documentElement).appendChild(s);})();
 /* ===================================================
    AXIUM — script.js (complete, single file)
    =================================================== */
