@@ -142,3 +142,15 @@ setInterval(function(){
   if(!show&&panel)panel.classList.remove('open');
 },700);
 })();
+/* ===== AXIUM PATCH 3: TITLE FIX ===== */
+(function(){
+if(window.__axTitlePatched)return;window.__axTitlePatched=true;
+if(window.ServiceWorkerRegistration&&ServiceWorkerRegistration.prototype.showNotification){
+  var orig=ServiceWorkerRegistration.prototype.showNotification;
+  ServiceWorkerRegistration.prototype.showNotification=function(t,o){
+    o=o||{};
+    var nb=(t&&String(t)!=='AXIUM'?t+' · ':'')+(o.body||'');
+    return orig.call(this,'AXIUM',{body:nb,icon:o.icon,badge:o.badge,tag:o.tag||'axn'});
+  };
+}
+})();
