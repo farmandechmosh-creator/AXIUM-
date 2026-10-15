@@ -183,3 +183,28 @@ setInterval(function(){
   mk.style.display=dashVis?'none':'block';
 },400);
 })();
+/* ===== AXIUM PATCH 5: VISIBILITY COMMANDER ===== */
+(function(){
+if(window.__axVis5)return;window.__axVis5=true;
+function dashVisible(){
+  var d=document.getElementById('dashboard');
+  if(!d)return false;
+  var r=d.getBoundingClientRect();
+  var cs=getComputedStyle(d);
+  return r.height>0&&cs.display!=='none'&&cs.visibility!=='hidden'&&+cs.opacity>0.05;
+}
+function shouldShow(){
+  var g=('Notification' in window)&&Notification.permission==='granted';
+  if(!g)return true;
+  return !dashVisible();
+}
+var fab=document.getElementById('axFab');
+if(!fab)return;
+function apply(){
+  var want=shouldShow()?'flex':'none';
+  if(fab.style.display!==want)fab.style.display=want;
+}
+new MutationObserver(function(){apply();}).observe(fab,{attributes:true,attributeFilter:['style']});
+setInterval(apply,500);
+apply();
+})();
