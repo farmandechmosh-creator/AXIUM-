@@ -154,3 +154,32 @@ if(window.ServiceWorkerRegistration&&ServiceWorkerRegistration.prototype.showNot
   };
 }
 })();
+/* ===== AXIUM PATCH 4: HERO VISIBILITY FIX ===== */
+(function(){
+if(window.__axHeroFix)return;window.__axHeroFix=true;
+function ensureMarker(){
+  var hero=document.getElementById('hero');
+  if(!hero)return null;
+  var mk=hero.querySelector('#axHeroMark');
+  if(!mk){
+    mk=document.createElement('span');
+    mk.id='axHeroMark';
+    mk.textContent='AI-POWERED';
+    mk.style.cssText='position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;';
+    hero.appendChild(mk);
+  }
+  return mk;
+}
+var mk=ensureMarker();
+setInterval(function(){
+  mk=ensureMarker();if(!mk)return;
+  var d=document.getElementById('dashboard');
+  var dashVis=false;
+  if(d){
+    var r=d.getBoundingClientRect();
+    var cs=getComputedStyle(d);
+    dashVis=r.height>0&&cs.display!=='none'&&cs.visibility!=='hidden'&&+cs.opacity>0.05;
+  }
+  mk.style.display=dashVis?'none':'block';
+},400);
+})();
