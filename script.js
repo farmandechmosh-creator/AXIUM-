@@ -233,4 +233,336 @@ if(cube){
 }
 
 /* ---------- 15) Load confirmation ---------- */
-window.addEventListener('load',()=> setTimeout(()=>toast('AXIUM ready ✅'),600) );
+window.addEventListener('load',()=> setTimeout(()=>toast('AXIUM ready ✅'),600) );/* ===== AXIUM Tasks v4 ===== */
+if(!window.__ax4){ window.__ax4=true;
+
+  let taskFilter='all';
+
+  function applyFilter(){
+    document.querySelectorAll('.tasks-card .task-row').forEach(r=>{
+      const done=r.classList.contains('done');
+      r.style.display = (taskFilter==='all') ? '' : (taskFilter==='done' ? (done?'':'none') : (done?'none':''));
+    });
+  }
+
+  function refreshTaskCount(){
+    const rows=[...document.querySelectorAll('.tasks-card .task-row')];
+    const done=rows.filter(r=>r.classList.contains('done')).length;
+    const left=rows.length-done;
+    const gc=document.querySelector('.gc-count'); if(gc) gc.textContent=left+' left';
+    const pct= rows.length ? Math.round(done/rows.length*100) : 0;
+    const fill=document.getElementById('tp-fill'); if(fill) fill.style.width=pct+'%';
+    const txt=document.getElementById('tp-txt'); if(txt) txt.textContent=pct+'%';
+    applyFilter();
+  }
+
+  function makeTaskRow(name){
+    const row=document.createElement('div'); row.className='task-row';
+    row.innerHTML='<div class="task-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div><span class="task-text"></span><span class="task-time">now</span><button class="task-del">✕</button>';
+    row.querySelector('.task-text').textContent=name;
+    row.addEventListener('click',e=>{
+      if(e.target.closest('.task-del')){ row.remove(); refreshTaskCount(); toast('Task deleted 🗑'); return; }
+      row.classList.toggle('done'); refreshTaskCount();
+    });
+    return row;
+  }
+
+  document.querySelectorAll('.tasks-card .task-row').forEach(row=>{
+    if(row.querySelector('.task-del'))return;
+    const del=document.createElement('button'); del.className='task-del'; del.textContent='✕';
+    del.addEventListener('click',e=>{ e.stopPropagation(); row.remove(); refreshTaskCount(); toast('Task deleted 🗑'); });
+    row.appendChild(del);
+  });
+
+  (function(){
+    const card=document.querySelector('.tasks-card'); if(!card)return;
+    const title=card.querySelector('.gc-title'); if(!title)return;
+    const tools=document.createElement('div'); tools.className='task-tools';
+    tools.innerHTML='<div class="task-filters"><button class="tf active" data-f="all">All</button><button class="tf" data-f="active">Active</button><button class="tf" data-f="done">Done</button></div><div class="task-progress"><div class="tp-bar"><i id="tp-fill"></i></div><span id="tp-txt">0%</span></div><button class="task-addmini">+ Add</button>';
+    title.after(tools);
+    tools.querySelectorAll('.tf').forEach(b=> b.addEventListener('click',()=>{
+      tools.querySelectorAll('.tf').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active'); taskFilter=b.dataset.f; applyFilter();
+    }));
+    tools.querySelector('.task-addmini').addEventListener('click',()=>{
+      addInputRow(card,'Task name...',(v)=>{
+        const rowEl=makeTaskRow(v);
+        const wrap=card.querySelector('.task-add');
+        card.insertBefore(rowEl, wrap||null);
+        refreshTaskCount(); toast('Task added ✅');
+      },'task-add-btn');
+    });
+    refreshTaskCount();
+  })();
+}
+/* ===== AXIUM v5: real timer + real achievements ===== */
+if(!window.__ax5){ window.__ax5=true;
+
+  const fcard=document.querySelector('.focus-card');
+  if(fcard){
+    fcard.innerHTML='<div class="gc-title">Focus Timer</div>'+
+      '<div class="ft-wrap">'+
+        '<div class="ft-ring"><svg viewBox="0 0 120 120"><circle class="ft-bg" cx="60" cy="60" r="52"/><circle class="ft-fill" id="ft-fill" cx="60" cy="60" r="52"/></svg>'+
+        '<div class="ft-center"><span id="ft-time">25:00</span><span class="ft-mode">FOCUS</span></div></div>'+
+        '<div class="ft-controls"><button class="ft-btn" id="ft-start">▶</button><button class="ft-btn" id="ft-reset">↺</button></div>'+
+        '<div class="ft-modes"><button class="ftm active" data-m="25">Focus 25</button><button class="ftm" data-m="5">Break 5</button><button class="ftm" data-m="50">Deep 50</button></div>'+
+      '</div>';
+  }
+  const FT_C=2*Math.PI*52;
+  let ftSec=1500, ftTotal=1500, ftInt=null, focusSessions=0, earlyBird=false;
+  const ftTime=document.getElementById('ft-time'), ftFill=document.getElementById('ft-fill'),
+        ftStart=document.getElementById('ft-start'), ftReset=document.getElementById('ft-reset');
+  function ftFmt(s){ const m=Math.floor(s/60), ss=s%60; return (m<10?'0':'')+m+':'+(ss<10?'0':'')+ss; }
+  function ftRender(){ if(ftTime)ftTime.textContent=ftFmt(ftSec); if(ftFill){ ftFill.style.strokeDasharray=FT_C; ftFill.style.strokeDashoffset=FT_C*(1-ftSec/ftTotal); } }
+  function stopFocus(){ clearInterval(ftInt); ftInt=null; if(ftStart)ftStart.textContent='▶'; toast('Focus paused ⏸'); }
+  function startFocus(){
+    if(ftInt)return;
+    if(new Date().getHours()<9) earlyBird=true;
+    if(ftStart)ftStart.textContent='❚❚';
+    toast('Focus started ▶ '+ftFmt(ftTotal));
+    ftInt=setInterval(()=>{
+      ftSec--;
+      if(ftSec<=0){ clearInterval(ftInt); ftInt=null; focusSessions++; if(ftStart)ftStart.textContent='▶'; ftSec=ftTotal; toast('Focus session complete 🎉 ('+focusSessions+')'); updateAchievements(); }
+      ftRender();
+    },1000);
+  }
+  if(ftStart) ftStart.addEventListener('click',()=>{ press(ftStart); if(ftInt)stopFocus(); else startFocus(); });
+  if(ftReset) ftReset.addEventListener('click',()=>{ press(ftReset); clearInterval(ftInt); ftInt=null; ftSec=ftTotal; if(ftStart)ftStart.textContent='▶'; ftRender(); toast('Timer reset ↺'); });
+  document.querySelectorAll('.ftm').forEach(b=> b.addEventListener('click',()=>{
+    document.querySelectorAll('.ftm').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    clearInterval(ftInt); ftInt=null;
+    ftTotal=parseInt(b.dataset.m)*60; ftSec=ftTotal;
+    if(ftStart)ftStart.textContent='▶';
+    const md=document.querySelector('.ft-mode'); if(md)md.textContent=b.textContent.toUpperCase();
+    ftRender();
+  }));
+  ftRender();
+
+  function updateAchievements(){
+    const rows=[...document.querySelectorAll('.tasks-card .task-row')];
+    const done=rows.filter(r=>r.classList.contains('done')).length;
+    const badges=document.querySelectorAll('.achievements .badge');
+    if(!badges.length)return;
+    const stats=[
+      {ok:true,  prog:'12/12'},
+      {ok:true,  prog:'92%'},
+      {ok:done>=100, prog:done+'/100'},
+      {ok:focusSessions>=10, prog:focusSessions+'/10'},
+      {ok:earlyBird, prog:earlyBird?'yes':'no'}
+    ];
+    badges.forEach((b,i)=>{
+      const s=stats[i]; if(!s)return;
+      b.classList.toggle('unlocked', s.ok);
+      b.classList.toggle('locked', !s.ok);
+      let st=b.querySelector('.b-state');
+      if(!st){ st=document.createElement('span'); st.className='b-state'; b.appendChild(st); }
+      st.textContent = s.ok ? 'UNLOCKED' : s.prog;
+    });
+  }
+  window.updateAchievements=updateAchievements;
+
+  function refreshTaskCount(){
+    const rows=[...document.querySelectorAll('.tasks-card .task-row')];
+    const done=rows.filter(r=>r.classList.contains('done')).length;
+    const left=rows.length-done;
+    const gc=document.querySelector('.gc-count'); if(gc) gc.textContent=left+' left';
+    const pct= rows.length? Math.round(done/rows.length*100):0;
+    const fill=document.getElementById('tp-fill'); if(fill)fill.style.width=pct+'%';
+    const txt=document.getElementById('tp-txt'); if(txt) txt.textContent=pct+'%';
+    if(window.applyFilter) window.applyFilter();
+    updateAchievements();
+  }
+  setTimeout(updateAchievements, 1500);
+}
+/* ===== AXIUM v6: personalization + persistence ===== */
+if(!window.__ax6){ window.__ax6=true;
+
+  const PREF_KEY='axium_prefs', TASK_KEY='axium_tasks', NOTE_KEY='axium_notes';
+  function loadPrefs(){ try{ return JSON.parse(localStorage.getItem(PREF_KEY))||{}; }catch(e){ return {}; } }
+  function savePrefs(p){ localStorage.setItem(PREF_KEY, JSON.stringify(p)); }
+  let prefs=Object.assign({name:'Alireza', city:'Tehran', accent:'blue'}, loadPrefs());
+
+  const ACCENTS={
+    blue:{b:'#2b7dff',b2:'#4a95ff',g:'rgba(43,125,255,0.5)'},
+    violet:{b:'#7c5cff',b2:'#b388ff',g:'rgba(124,92,255,0.5)'},
+    cyan:{b:'#00c2d6',b2:'#3fd6d6',g:'rgba(0,194,214,0.5)'},
+    orange:{b:'#ff9f1a',b2:'#ffb443',g:'rgba(255,159,26,0.5)'},
+    green:{b:'#16c784',b2:'#3fd67a',g:'rgba(22,199,132,0.5)'}
+  };
+  function applyAccent(){ const a=ACCENTS[prefs.accent]||ACCENTS.blue; const r=document.documentElement.style; r.setProperty('--blue',a.b); r.setProperty('--blue2',a.b2); r.setProperty('--glow',a.g); }
+  function greetWord(){ const h=new Date().getHours(); return h<12?'Good morning':(h<17?'Good afternoon':'Good evening'); }
+  function applyPrefs(){
+    applyAccent();
+    const dn=document.querySelector('.drawer-profile-info strong'); if(dn)dn.textContent=prefs.name;
+    const wc=document.querySelector('.wx-city'); if(wc)wc.textContent=prefs.city+' · Partly Cloudy';
+  }
+
+  function typeGreeting(){
+    const el=document.getElementById('type-text'); if(!el)return;
+    const full=greetWord()+', '; let i=0;
+    const t=setInterval(()=>{
+      el.innerHTML=full.slice(0,i)+'<span class="name-glow">'+prefs.name+'</span>'.slice(0, Math.max(0, i-full.length));
+      i++; if(i>full.length+prefs.name.length){ clearInterval(t); el.innerHTML=full+'<span class="name-glow">'+prefs.name+'</span>'; }
+    },60);
+  }
+
+  function saveTasks(){ const rows=[...document.querySelectorAll('.tasks-card .task-row')].map(r=>({t:(r.querySelector('.task-text')||{}).textContent||'', d:r.classList.contains('done')})); localStorage.setItem(TASK_KEY, JSON.stringify(rows)); }
+  function loadTasks(){
+    const st=localStorage.getItem(TASK_KEY); if(!st)return;
+    let arr; try{ arr=JSON.parse(st); }catch(e){ return; }
+    const card=document.querySelector('.tasks-card'); if(!card)return;
+    card.querySelectorAll('.task-row').forEach(r=>r.remove());
+    arr.forEach(item=>{ const row=makeTaskRow(item.t); if(item.d)row.classList.add('done'); card.appendChild(row); });
+    refreshTaskCount();
+  }
+  function saveNotes(){ const ns=[...document.querySelectorAll('.note-line')].map(n=>n.textContent.trim()); localStorage.setItem(NOTE_KEY, JSON.stringify(ns)); }
+  function loadNotes(){
+    const st=localStorage.getItem(NOTE_KEY); if(!st)return;
+    let arr; try{ arr=JSON.parse(st); }catch(e){ return; }
+    const nr=document.querySelector('.note-row'); if(!nr)return;
+    nr.querySelectorAll('.note-line').forEach(n=>n.remove());
+    arr.forEach(txt=>{ const n=document.createElement('div'); n.className='note-line'; n.innerHTML='<span class="note-dot"></span><span></span>'; n.lastChild.textContent=txt; nr.appendChild(n); });
+  }
+
+  const tcard=document.querySelector('.tasks-card');
+  if(tcard && window.MutationObserver){ new MutationObserver(()=>saveTasks()).observe(tcard,{childList:true,subtree:true,attributes:true,attributeFilter:['class']}); }
+  const nrow=document.querySelector('.note-row');
+  if(nrow && window.MutationObserver){ new MutationObserver(()=>saveNotes()).observe(nrow,{childList:true,subtree:true}); }
+
+  let setSheet=null;
+  function openSettings(){
+    if(!setSheet){
+      setSheet=document.createElement('div'); setSheet.className='chat-sheet settings-sheet';
+      setSheet.innerHTML='<div class="chat-head"><span>⚙️ Personalize</span><button class="set-close">✕</button></div>'+
+        '<div class="set-body">'+
+          '<label class="set-lbl">Your name</label><input class="task-input" id="set-name">'+
+          '<label class="set-lbl">Your city</label><input class="task-input" id="set-city">'+
+          '<label class="set-lbl">Accent color</label><div class="set-swatches">'+Object.keys(ACCENTS).map(k=>'<button class="swatch" data-a="'+k+'" style="--sw:'+ACCENTS[k].b+'"></button>').join('')+'</div>'+
+          '<button class="set-save">Save</button>'+
+          '<button class="set-reset">Reset all data</button>'+
+        '</div>';
+      document.body.appendChild(setSheet);
+      setSheet.querySelector('#set-name').value=prefs.name;
+      setSheet.querySelector('#set-city').value=prefs.city;
+      const markSw=()=>setSheet.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('on', s.dataset.a===prefs.accent));
+      markSw();
+      setSheet.querySelectorAll('.swatch').forEach(s=>s.addEventListener('click',()=>{ prefs.accent=s.dataset.a; markSw(); applyAccent(); }));
+      setSheet.querySelector('.set-close').addEventListener('click',()=>setSheet.classList.remove('open'));
+      setSheet.querySelector('.set-save').addEventListener('click',()=>{
+        prefs.name=setSheet.querySelector('#set-name').value.trim()||prefs.name;
+        prefs.city=setSheet.querySelector('#set-city').value.trim()||prefs.city;
+        savePrefs(prefs); applyPrefs(); typeGreeting(); setSheet.classList.remove('open'); toast('Saved ✅');
+      });
+      setSheet.querySelector('.set-reset').addEventListener('click',()=>{ localStorage.removeItem(TASK_KEY); localStorage.removeItem(NOTE_KEY); localStorage.removeItem(PREF_KEY); location.reload(); });
+    }
+    setSheet.classList.add('open');
+  }
+  document.querySelectorAll('.drawer-link').forEach(l=>{
+    if(/Settings/i.test(l.textContent)){ l.addEventListener('click',e=>{ e.preventDefault(); if(dr)dr.classList.remove('open'); if(dov)dov.classList.remove('open'); openSettings(); }); }
+  });
+
+  applyPrefs();
+  loadTasks();
+  loadNotes();
+}
+/* ===== AXIUM v7: user-owned data + REAL stats ===== */
+if(!window.__ax7){ window.__ax7=true;
+
+  const MIN_KEY='axium_minutes', STREAK_KEY='axium_streak';
+  function getMinutes(){ return parseInt(localStorage.getItem(MIN_KEY)||'0',10); }
+  function addMinutes(m){ localStorage.setItem(MIN_KEY, String(getMinutes()+m)); }
+  function fmtMinutes(m){ if(m>=60){ const h=Math.floor(m/60), mm=m%60; return mm? h+'h '+mm+'m' : h+'h'; } return m+'m'; }
+  function computeStreak(){
+    const today=new Date().toDateString();
+    let store; try{ store=JSON.parse(localStorage.getItem(STREAK_KEY)||'null'); }catch(e){ store=null; }
+    store=store||{last:'',count:0};
+    const yest=new Date(Date.now()-86400000).toDateString();
+    if(store.last!==today){ store.count = (store.last===yest)? store.count+1 : 1; store.last=today; localStorage.setItem(STREAK_KEY, JSON.stringify(store)); }
+    return store.count;
+  }
+  function realStats(){
+    const rows=[...document.querySelectorAll('.tasks-card .task-row')];
+    const done=rows.filter(r=>r.classList.contains('done')).length;
+    const min=getMinutes();
+    const streak=computeStreak();
+    const energy=Math.min(100, 30 + done*6 + Math.floor(min/10));
+    return {done, min, streak, energy, total:rows.length};
+  }
+  function paintStats(){
+    const s=realStats();
+    const a=document.getElementById('stat-tasks'); if(a)a.textContent=s.done;
+    const b=document.getElementById('stat-focus'); if(b)b.textContent=fmtMinutes(s.min);
+    const c=document.getElementById('stat-streak'); if(c)c.textContent=s.streak;
+    const d=document.getElementById('energy-score'); if(d)d.textContent=s.energy+'%';
+    const e=document.getElementById('cube-score'); if(e)e.textContent=s.energy;
+    setCell('cf1', s.total? Math.round(s.done/s.total*100):0);
+    setCell('cf2', Math.min(100, Math.round(s.min/120*100)));
+    setCell('cf3', Math.min(100, s.streak*10));
+  }
+
+  function ensureEmptyStates(){
+    const card=document.querySelector('.tasks-card');
+    if(card && !card.querySelector('#tasks-empty')){ const e=document.createElement('div'); e.className='empty-state'; e.id='tasks-empty'; e.textContent='No tasks yet — tap "+ Add" to create your first task'; card.appendChild(e); }
+    const nr=document.querySelector('.note-row');
+    const ncard=nr? nr.closest('.e-card'):null;
+    if(ncard && !ncard.querySelector('#notes-empty')){ const e=document.createElement('div'); e.className='empty-state'; e.id='notes-empty'; e.textContent='No notes yet — add your first note'; ncard.appendChild(e); }
+    if(ncard && !ncard.querySelector('.note-addmini')){
+      const b=document.createElement('button'); b.className='task-addmini note-addmini'; b.textContent='+ Note'; b.style.marginLeft='auto';
+      const gt=ncard.querySelector('.gc-title'); if(gt)gt.appendChild(b);
+      b.addEventListener('click',()=>{ addInputRow(nr,'Note...',(v)=>{ const n=document.createElement('div'); n.className='note-line'; n.innerHTML='<span class="note-dot"></span><span></span>'; n.lastChild.textContent=v; nr.appendChild(n); toast('Note added 📝'); },'note-add-btn'); });
+    }
+  }
+  function toggleEmpty(){
+    const te=document.getElementById('tasks-empty'); if(te) te.style.display = document.querySelectorAll('.tasks-card .task-row').length? 'none':'';
+    const ne=document.getElementById('notes-empty'); if(ne) ne.style.display = document.querySelectorAll('.note-line').length? 'none':'';
+  }
+
+  if(!localStorage.getItem('axium_tasks')){ document.querySelectorAll('.tasks-card .task-row').forEach(r=>r.remove()); }
+  if(!localStorage.getItem('axium_notes')){ document.querySelectorAll('.note-line').forEach(n=>n.remove()); }
+  ensureEmptyStates(); toggleEmpty();
+  const nrow2=document.querySelector('.note-row');
+  if(nrow2 && window.MutationObserver){ new MutationObserver(()=>toggleEmpty()).observe(nrow2,{childList:true,subtree:true}); }
+
+  function refreshTaskCount(){
+    const rows=[...document.querySelectorAll('.tasks-card .task-row')];
+    const done=rows.filter(r=>r.classList.contains('done')).length;
+    const left=rows.length-done;
+    const gc=document.querySelector('.gc-count'); if(gc) gc.textContent=left+' left';
+    const pct= rows.length? Math.round(done/rows.length*100):0;
+    const fill=document.getElementById('tp-fill'); if(fill)fill.style.width=pct+'%';
+    const txt=document.getElementById('tp-txt'); if(txt)txt.textContent=pct+'%';
+    if(window.applyFilter) window.applyFilter();
+    if(window.updateAchievements) window.updateAchievements();
+    paintStats(); toggleEmpty();
+  }
+
+  function startLiving(){
+    startClock(); typeGreeting(); initReveal();
+    paintStats(); toggleEmpty();
+    setTimeout(()=>{ if(window.updateAchievements) window.updateAchievements(); },800);
+  }
+
+  function stopFocus(){ clearInterval(ftInt); ftInt=null; const b=document.getElementById('ft-start'); if(b)b.textContent='▶'; toast('Focus paused ⏸'); }
+  function startFocus(){
+    if(ftInt)return;
+    if(new Date().getHours()<9) earlyBird=true;
+    const b=document.getElementById('ft-start'); if(b)b.textContent='❚❚';
+    toast('Focus started ▶ '+ftFmt(ftTotal));
+    ftInt=setInterval(()=>{
+      ftSec--;
+      if(ftSec<=0){
+        clearInterval(ftInt); ftInt=null;
+        addMinutes(Math.round(ftTotal/60));
+        focusSessions++;
+        if(b)b.textContent='▶';
+        ftSec=ftTotal;
+        toast('Focus session complete 🎉 +'+Math.round(ftTotal/60)+'m');
+        paintStats(); if(window.updateAchievements)updateAchievements();
+      }
+      ftRender();
+    },1000);
+  }
+
+  refreshTaskCount();
+                }
