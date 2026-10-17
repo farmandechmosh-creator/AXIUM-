@@ -1024,3 +1024,30 @@ if(!window.__ax8){ window.__ax8=true;
   }
   enhance(); reveal(); setInterval(enhance,60000);
 })();
+/* ===== AXIUM v15: INSTALL APP (PWA) ===== */
+(function(){
+  if(window.__ax15)return; window.__ax15=true;
+  var deferred=null;
+  function standalone(){ return (window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true; }
+  var btn=document.createElement('button');
+  btn.id='axInstall'; btn.type='button';
+  btn.innerHTML='⬇ <b>Install AXIUM</b>';
+  btn.style.cssText='position:fixed;left:16px;bottom:20px;z-index:99999;display:none;align-items:center;gap:8px;padding:13px 18px;border-radius:999px;border:1px solid rgba(63,214,122,.5);background:linear-gradient(135deg,#123524,#0d2b1c);color:#7ae8b0;font-weight:800;font-size:.8rem;cursor:pointer;box-shadow:0 10px 26px rgba(63,214,122,.25);backdrop-filter:blur(8px)';
+  document.body.appendChild(btn);
+  function show(){ if(!standalone()) btn.style.display='flex'; }
+  window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); deferred=e; show(); });
+  btn.addEventListener('click',function(){
+    if(deferred){
+      deferred.prompt();
+      deferred.userChoice.then(function(r){
+        if(r&&r.outcome==='accepted'){ if(window.toast)toast('AXIUM installed 🎉'); btn.style.display='none'; }
+        deferred=null;
+      });
+    }else{
+      if(window.toast)toast('Menu (⋮) → Install app / Add to Home screen');
+    }
+  });
+  window.addEventListener('appinstalled',function(){ if(window.toast)toast('AXIUM installed 🎉'); btn.style.display='none'; });
+  if(standalone()){ setTimeout(function(){ if(window.toast)toast('Running as installed app ✅'); },1500); }
+  setTimeout(show,4000);
+})();
