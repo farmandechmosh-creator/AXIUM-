@@ -1,6 +1,9 @@
 {
+  "id": "./",
   "name": "AXIUM — Smart Productivity",
   "short_name": "AXIUM",
+  "description": "AI-powered productivity platform with a smart coach, tasks, calendar, notes and real stats.",
+  "lang": "en",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -8,6 +11,7 @@
   "theme_color": "#2b7dff",
   "icons": [
     {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"},
-    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable"}
+    {"src": "icon.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "any"},
+    {"src": "icon.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "maskable"}
   ]
 }
