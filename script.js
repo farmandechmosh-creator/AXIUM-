@@ -899,3 +899,128 @@ if(!window.__ax7){ window.__ax7=true;
 
   refreshTaskCount();
                  }
+/* ===== AXIUM v8: WHOLE dashboard user-owned ===== */
+if(!window.__ax8){ window.__ax8=true;
+
+  const DAILY_KEY='axium_daily', SCHED_KEY='axium_schedule', GOAL_KEY='axium_goals';
+  function dayKey(d){ return (d||new Date()).toISOString().slice(0,10); }
+  function getDaily(){ try{return JSON.parse(localStorage.getItem(DAILY_KEY)||'{}');}catch(e){return {};} }
+  function setDaily(o){ localStorage.setItem(DAILY_KEY, JSON.stringify(o)); }
+  function bumpDaily(f,amt){ const o=getDaily(); const k=dayKey(); o[k]=o[k]||{m:0,t:0}; o[k][f]=Math.max(0,(o[k][f]||0)+amt); setDaily(o); }
+  function dayScore(k){ const d=getDaily()[k]||{m:0,t:0}; return (d.m||0)+(d.t||0)*10; }
+
+  function renderWeek(){
+    const bars=[...document.querySelectorAll('.wchart .wbar')]; if(!bars.length)return;
+    const vals=[]; for(let i=6;i>=0;i--){ const d=new Date(Date.now()-i*86400000); vals.push({v:dayScore(dayKey(d)), wd:d.toLocaleDateString('en',{weekday:'narrow'})}); }
+    const max=Math.max(1,...vals.map(x=>x.v));
+    bars.forEach((b,i)=>{ const v=vals[i]; b.style.setProperty('--h', Math.round(8+(v.v/max)*84)+'%'); const wv=b.querySelector('.wv'); if(wv)wv.textContent=v.v; const wl=b.querySelector('.wl'); if(wl)wl.textContent=v.wd; b.classList.toggle('hot', v.v>0&&v.v===max); });
+    const card=document.querySelector('.week-chart');
+    let em=document.getElementById('week-empty');
+    if(card&&!em){ em=document.createElement('div'); em.id='week-empty'; em.className='empty-state'; em.textContent='No activity yet — your week builds as you work'; card.appendChild(em); }
+    if(em) em.style.display = vals.some(x=>x.v>0)?'none':'';
+  }
+  function renderHabits(){
+    const cells=[...document.querySelectorAll('.heat .hq')]; if(!cells.length)return;
+    cells.forEach((c,i)=>{ const d=new Date(Date.now()-(cells.length-1-i)*86400000); const v=dayScore(dayKey(d)); c.className='hq '+(v<=0?'off': v<20?'low': v<50?'mid':'on'); });
+  }
+
+  function schedEmpty(){ const tl=document.querySelector('.schedule .tl'); if(!tl)return; const card=document.querySelector('.schedule'); let em=document.getElementById('sched-empty'); if(card&&!em){ em=document.createElement('div'); em.id='sched-empty'; em.className='empty-state'; em.textContent='No events yet — add your first event'; card.appendChild(em); } if(em) em.style.display = tl.querySelectorAll('.tl-row').length?'none':''; }
+  function saveSched(){ const arr=[...document.querySelectorAll('.schedule .tl-row')].map(r=>({t:r.querySelector('.tl-time').textContent, title:r.querySelector('b').textContent})); localStorage.setItem(SCHED_KEY, JSON.stringify(arr)); schedEmpty(); }
+  function addScheduleRow(item,skipSave){
+    const tl=document.querySelector('.schedule .tl'); if(!tl)return;
+    const row=document.createElement('div'); row.className='tl-row';
+    row.innerHTML='<span class="tl-time"></span><span class="tl-dot d-blue"></span><div class="tl-body"><b></b> <span class="sch-del">✕</span></div>';
+    row.querySelector('.tl-time').textContent=item.t; row.querySelector('b').textContent=item.title;
+    row.querySelector('.sch-del').style.cssText='cursor:pointer;color:#8a94a3;font-size:0.8rem';
+    row.querySelector('.sch-del').addEventListener('click',e=>{ e.stopPropagation(); row.remove(); saveSched(); toast('Event removed 🗑'); });
+    tl.appendChild(row); if(!skipSave)saveSched();
+  }
+  (function initSched(){
+    const tl=document.querySelector('.schedule .tl'); if(!tl)return;
+    tl.querySelectorAll('.tl-row').forEach(r=>r.remove());
+    const st=localStorage.getItem(SCHED_KEY);
+    if(st){ let arr; try{arr=JSON.parse(st);}catch(e){arr=[];} arr.forEach(i=>addScheduleRow(i,true)); }
+    const card=document.querySelector('.schedule');
+    if(card&&!card.querySelector('.sch-add')){ const b=document.createElement('button'); b.className='task-addmini sch-add'; b.textContent='+ Event'; card.insertBefore(b, card.firstChild);
+      b.addEventListener('click',()=>{ addInputRow(tl,'09:00 Event title...',(v)=>{ const m=v.match(/^(\d{1,2}:\d{2})\s+(.+)$/); addScheduleRow(m?{t:m[1],title:m[2]}:{t:'--:--',title:v}); },'task-add-btn'); });
+    }
+    schedEmpty();
+  })();
+
+  function goalEmpty(){ const card=document.querySelector('.goals'); if(!card)return; let em=document.getElementById('goals-empty'); if(!em){ em=document.createElement('div'); em.id='goals-empty'; em.className='empty-state'; em.textContent='No goals yet — add your first goal'; card.appendChild(em); } em.style.display = card.querySelectorAll('.goal-row').length?'none':''; }
+  function saveGoals(){ const arr=[...document.querySelectorAll('.goals .goal-row')].map(r=>({name:r.querySelector('.goal-name').textContent, pct:parseInt(r.querySelector('.goal-pct').textContent)||0})); localStorage.setItem(GOAL_KEY, JSON.stringify(arr)); goalEmpty(); }
+  function addGoalRow(g,skipSave){
+    const card=document.querySelector('.goals'); if(!card)return;
+    const row=document.createElement('div'); row.className='goal-row';
+    row.innerHTML='<span class="goal-name"></span><button class="goal-btn gm">−</button><span class="goal-pct"></span><button class="goal-btn gp">+</button><button class="goal-del">✕</button>';
+    row.querySelector('.goal-name').textContent=g.name;
+    const pctEl=row.querySelector('.goal-pct');
+    const setPct=v=>{ g.pct=Math.max(0,Math.min(100,v)); pctEl.textContent=g.pct+'%'; if(!skipSave)saveGoals(); };
+    setPct(g.pct||0);
+    row.querySelector('.gm').addEventListener('click',()=>setPct(g.pct-10));
+    row.querySelector('.gp').addEventListener('click',()=>setPct(g.pct+10));
+    row.querySelector('.goal-del').addEventListener('click',()=>{ row.remove(); saveGoals(); toast('Goal removed 🗑'); });
+    card.appendChild(row); if(!skipSave)saveGoals();
+  }
+  (function initGoals(){
+    const card=document.querySelector('.goals'); if(!card)return;
+    card.querySelectorAll('.goal').forEach(g=>g.remove());
+    const st=localStorage.getItem(GOAL_KEY);
+    if(st){ let arr; try{arr=JSON.parse(st);}catch(e){arr=[];} arr.forEach(g=>addGoalRow(g,true)); }
+    if(!card.querySelector('.goal-add')){ const b=document.createElement('button'); b.className='task-addmini goal-add'; b.textContent='+ Goal'; card.insertBefore(b, card.firstChild);
+      b.addEventListener('click',()=>{ addInputRow(card,'Goal name...',(v)=>{ addGoalRow({name:v,pct:0}); },'task-add-btn'); });
+    }
+    goalEmpty();
+  })();
+
+  function renderInsight(){ const s=realStats(); const el=document.querySelector('.ai-text'); if(!el)return;
+    el.textContent = (s.done===0&&s.min===0) ? 'Welcome! Add your first task or start a focus session — I\'ll learn your energy patterns.' : ('Today: '+s.done+' tasks done, '+fmtMinutes(s.min)+' focused. '+(s.energy>70?'Energy is high — tackle your hardest task now!':'Energy moderate — good window for light tasks.'));
+  }
+
+  function applyMotto(){ var m=''; try{ m=(JSON.parse(localStorage.getItem('axium_prefs'))||{}).motto||''; }catch(e){} const q=document.querySelector('.quote p'); if(q) q.textContent = m || 'Energy is currency. Spend it on what compounds.'; }
+
+  document.addEventListener('click', e=>{
+    const row=e.target.closest('.task-row'); if(!row||e.target.closest('.task-del'))return;
+    const was=row.classList.contains('done');
+    setTimeout(()=>{ const now=row.classList.contains('done');
+      if(now&&!was) bumpDaily('t',1);
+      if(!now&&was) bumpDaily('t',-1);
+      renderWeek(); renderHabits(); paintStats();
+    },0);
+  }, true);
+
+  renderWeek(); renderHabits(); renderInsight(); applyMotto();
+}
+/* ===== AXIUM v14: SCHEDULE PREMIUM DESIGN ===== */
+(function(){
+  if(window.__ax14)return; window.__ax14=true;
+  var st=document.createElement('style');
+  st.textContent='.schedule .tl{position:relative}.schedule .tl-row{opacity:0;transform:translateX(-26px)}.schedule .tl-row.in{animation:schIn .6s cubic-bezier(.34,1.56,.64,1) both}@keyframes schIn{to{opacity:1;transform:none}}.schedule .tl-time{font-variant-numeric:tabular-nums;color:#7bb5ff;background:rgba(43,125,255,.08);border:1px solid rgba(43,125,255,.25);padding:4px 9px;border-radius:10px;font-weight:800}.schedule .tl-dot{position:relative;background:var(--c)!important;box-shadow:0 0 16px var(--c);animation:dotFloat 2.6s ease-in-out infinite}.schedule .tl-dot::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--c);opacity:.5;animation:dotPing 2.4s ease-out infinite}.schedule .d-blue{--c:#2b7dff}.schedule .d-green{--c:#3fd67a}.schedule .d-violet{--c:#b388ff}.schedule .d-orange{--c:#ffb443}.schedule .d-cyan{--c:#00c2d6}.schedule .tl-body{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px 12px;transition:transform .3s,border-color .3s,box-shadow .3s}.schedule .tl-row:hover .tl-body,.schedule .tl-row:active .tl-body{transform:translateX(6px);border-color:rgba(43,125,255,.45);box-shadow:0 8px 24px rgba(43,125,255,.18)}.schedule .tl-row.now .tl-body{border-color:rgba(63,214,122,.55);box-shadow:0 0 26px rgba(63,214,122,.18)}.schedule .tl-row.now .tl-time{color:#3fd67a;border-color:rgba(63,214,122,.45);background:rgba(63,214,122,.1)}.schedule .tl-row.now .tl-body b::after{content:" · NOW";color:#3fd67a;font-size:.6rem;letter-spacing:1px}@keyframes dotPing{0%{transform:scale(.6);opacity:.7}100%{transform:scale(1.6);opacity:0}}@keyframes dotFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}';
+  document.head.appendChild(st);
+  function enhance(){
+    var rows=document.querySelectorAll('.schedule .tl-row');
+    rows.forEach(function(r,i){
+      if(r.dataset.ax14)return; r.dataset.ax14='1';
+      r.style.animationDelay=(0.1+i*0.12)+'s';
+    });
+    var now=new Date(); var cur=now.getHours()*60+now.getMinutes();
+    var best=null,bd=1e9;
+    rows.forEach(function(r){
+      var t=r.querySelector('.tl-time'); if(!t)return;
+      var p=(t.textContent||'').split(':'); if(p.length<2)return;
+      var m=(+p[0])*60+(+p[1]);
+      r.classList.remove('now');
+      var d=cur-m; if(d>=0&&d<bd){bd=d;best=r;}
+    });
+    if(best)best.classList.add('now');
+  }
+  function reveal(){
+    var rows=document.querySelectorAll('.schedule .tl-row');
+    if(!rows.length)return;
+    if(!('IntersectionObserver' in window)){ rows.forEach(function(r){r.classList.add('in');}); return; }
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); },{threshold:0.2});
+    rows.forEach(function(r){ io.observe(r); });
+    setTimeout(function(){ rows.forEach(function(r){ r.classList.add('in'); }); },1800);
+  }
+  enhance(); reveal(); setInterval(enhance,60000);
+})();
