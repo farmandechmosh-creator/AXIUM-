@@ -1051,3 +1051,4 @@ if(!window.__ax8){ window.__ax8=true;
   if(standalone()){ setTimeout(function(){ if(window.toast)toast('Running as installed app ✅'); },1500); }
   setTimeout(show,4000);
 })();
+https://github.com/farmandechmosh-creator/AXIUM-/edit/main/script.js
