@@ -1024,17 +1024,3 @@ if(!window.__ax8){ window.__ax8=true;
   }
   enhance(); reveal(); setInterval(enhance,60000);
 })();
-/* ===== AXIUM v17: INSTALL BUTTON VISIBILITY FIX ===== */
-(function(){
-  if(window.__ax17)return; window.__ax17=true;
-  window.addEventListener('appinstalled',function(){ window.__axInstalled=true; });
-  function fix(){
-    if(window.__axInstalled)return;
-    var b=document.getElementById('axInstall');
-    if(!b)return;
-    var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
-    if(!standalone&&b.style.display!=='flex')b.style.display='flex';
-  }
-  setTimeout(fix,3000);
-  setInterval(fix,1000);
-})();
