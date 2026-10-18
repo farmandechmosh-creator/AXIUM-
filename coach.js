@@ -215,3 +215,18 @@ function waitBody(){
 }
 waitBody();
 })();
+/* ===== AXIUM v18: INSTALL SHEET ANIMATIONS ===== */
+(function(){
+if(window.__ax18)return;window.__ax18=true;
+var st=document.createElement('style');
+st.textContent='#axSheet{animation:axBgIn .4s ease both}#axSheet.open .card{animation:axCardIn .6s cubic-bezier(.34,1.56,.64,1) both}#axSheet.open img{animation:axIconIn .7s .1s cubic-bezier(.34,1.56,.64,1) both,axIconFloat 3s 1s ease-in-out infinite}#axSheet.open .nm{animation:axTextIn .5s .2s both,axShineTxt 3s 1s linear infinite}#axSheet.open .tg{animation:axTextIn .5s .3s both}#axSheet.open .mt{animation:axTextIn .5s .38s both}#axSheet.open .card>div:nth-of-type(4){animation:axFeatIn .5s .45s cubic-bezier(.34,1.56,.64,1) both}#axSheet.open .card>div:nth-of-type(5){animation:axFeatIn .5s .55s cubic-bezier(.34,1.56,.64,1) both}#axSheet.open .card>div:nth-of-type(6){animation:axFeatIn .5s .65s cubic-bezier(.34,1.56,.64,1) both}#axSheet.open .card>div:nth-of-type(7){animation:axFeatIn .5s .75s cubic-bezier(.34,1.56,.64,1) both}#axSheet.open .ins{position:relative;overflow:hidden;animation:axBtnIn .55s .85s cubic-bezier(.34,1.56,.64,1) both,axBtnPulse 2.2s 1.6s ease-out infinite}#axSheet.open .ins::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:axSweep 2.4s 1.4s ease-in-out infinite}#axSheet.open .no{animation:axTextIn .4s 1s both}@keyframes axBgIn{from{opacity:0}to{opacity:1}}@keyframes axCardIn{from{opacity:0;transform:translateY(40px) scale(.85)}to{opacity:1;transform:none}}@keyframes axIconIn{from{opacity:0;transform:scale(.3) rotate(-15deg)}60%{transform:scale(1.1) rotate(3deg)}to{opacity:1;transform:scale(1)}}@keyframes axIconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}@keyframes axTextIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@keyframes axFeatIn{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}@keyframes axBtnIn{from{opacity:0;transform:translateY(20px) scale(.9)}to{opacity:1;transform:none}}@keyframes axBtnPulse{0%,100%{box-shadow:0 12px 30px rgba(22,199,132,.35),0 0 0 0 rgba(22,199,132,.5)}50%{box-shadow:0 12px 30px rgba(22,199,132,.35),0 0 0 16px rgba(22,199,132,0)}}@keyframes axSweep{0%{left:-60%}60%,100%{left:120%}}@keyframes axShineTxt{0%{background-position:0% 50%}100%{background-position:200% 50%}}';
+document.head.appendChild(st);
+var nm=document.querySelector('#axSheet .nm');
+if(nm){
+  nm.style.background='linear-gradient(90deg,#fff,#7bb5ff,#00c2d6,#fff)';
+  nm.style.backgroundSize='200% 100%';
+  nm.style.webkitBackgroundClip='text';
+  nm.style.backgroundClip='text';
+  nm.style.webkitTextFillColor='transparent';
+}
+})();
