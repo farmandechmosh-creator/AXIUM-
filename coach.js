@@ -170,3 +170,48 @@ function boot(){
 }
 boot();
 })();
+/* ===== AXIUM INSTALL APP (coach-side) ===== */
+(function(){
+if(window.__axInst)return;window.__axInst=true;
+function waitBody(){
+ if(!document.body){setTimeout(waitBody,300);return;}
+ var deferred=null;
+ window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;});
+ window.addEventListener('appinstalled',function(){
+  window.__axInstalled=true;
+  var s=document.getElementById('axSheet');if(s)s.classList.remove('open');
+  var b=document.getElementById('axInstall');if(b)b.style.display='none';
+  if(window.toast)toast('AXIUM installed 🎉');
+ });
+ var st=document.createElement('style');
+ st.textContent='#axInstall{position:fixed;left:16px;bottom:20px;z-index:99999;display:none;align-items:center;gap:8px;padding:13px 18px;border-radius:999px;border:1px solid rgba(63,214,122,.5);background:linear-gradient(135deg,#123524,#0d2b1c);color:#7ae8b0;font-weight:800;font-size:.8rem;cursor:pointer;box-shadow:0 10px 26px rgba(63,214,122,.25);backdrop-filter:blur(8px)}#axSheet{position:fixed;inset:0;z-index:100000;background:rgba(5,8,13,.7);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px}#axSheet.open{display:flex}#axSheet .card{width:min(420px,94vw);max-height:86vh;overflow-y:auto;background:linear-gradient(170deg,#0e1626,#0a0f1a);border:1px solid rgba(63,214,122,.35);border-radius:26px;padding:24px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.7)}#axSheet img{width:84px;height:84px;border-radius:22px;box-shadow:0 12px 30px rgba(43,125,255,.45)}#axSheet .nm{color:#eef2f7;font-weight:900;font-size:1.3rem;letter-spacing:2px;margin-top:12px}#axSheet .tg{color:#3fd67a;font-size:.7rem;font-weight:800;letter-spacing:2px;margin-top:4px}#axSheet .mt{color:#8a94a3;font-size:.75rem;margin-top:6px}#axSheet .ft{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;color:#c5cfdb;font-size:.78rem;margin-top:8px;text-align:left}#axSheet .ins{width:100%;margin-top:16px;padding:15px;border:none;border-radius:16px;background:linear-gradient(135deg,#16c784,#0fa06a);color:#fff;font-weight:900;font-size:.95rem;cursor:pointer;box-shadow:0 12px 30px rgba(22,199,132,.35)}#axSheet .gd{display:none;color:#8a94a3;font-size:.72rem;line-height:1.9;margin-top:12px;background:rgba(43,125,255,.06);border:1px solid rgba(43,125,255,.25);border-radius:14px;padding:12px}#axSheet .no{width:100%;margin-top:10px;padding:12px;border:none;border-radius:14px;background:rgba(255,255,255,.06);color:#8a94a3;font-weight:700;cursor:pointer}';
+ document.head.appendChild(st);
+ var b=document.createElement('button');b.id='axInstall';b.type='button';b.innerHTML='⬇ <b>Install AXIUM</b>';
+ document.body.appendChild(b);
+ var s=document.createElement('div');s.id='axSheet';
+ s.innerHTML='<div class="card"><img src="icon.svg" alt="AXIUM"><div class="nm">AXIUM</div><div class="tg">AI-POWERED PRODUCTIVITY</div><div class="mt">★★★★★ · Free · 2 MB</div><div class="ft">🔔 Smart coach & real notifications</div><div class="ft">📋 Tasks, calendar, notes & AI</div><div class="ft">📊 Real energy & streak stats</div><div class="ft">🌙 Works offline & fullscreen</div><button class="ins" id="axSheetInstall">⬇ INSTALL</button><div class="gd" id="axSheetGuide">1️⃣ Browser menu (⋮)<br>2️⃣ <b>Add to Home screen / Install app</b><br>3️⃣ Confirm → done! 🎉</div><button class="no" id="axSheetClose">Not now</button></div>';
+ document.body.appendChild(s);
+ b.addEventListener('click',function(){s.classList.add('open');});
+ s.addEventListener('click',function(e){if(e.target===s)s.classList.remove('open');});
+ document.getElementById('axSheetClose').addEventListener('click',function(){s.classList.remove('open');});
+ document.getElementById('axSheetInstall').addEventListener('click',function(){
+  if(deferred){
+   deferred.prompt();
+   deferred.userChoice.then(function(r){
+    if(r&&r.outcome==='accepted'){s.classList.remove('open');if(window.toast)toast('AXIUM installed 🎉');}
+    else{document.getElementById('axSheetGuide').style.display='block';}
+   });
+   deferred=null;
+  }else{
+   document.getElementById('axSheetGuide').style.display='block';
+  }
+ });
+ function fix(){
+  if(window.__axInstalled)return;
+  var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+  if(!standalone&&b.style.display!=='flex')b.style.display='flex';
+ }
+ setTimeout(fix,2500);setInterval(fix,1000);
+}
+waitBody();
+})();
