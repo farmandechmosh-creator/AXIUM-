@@ -230,3 +230,47 @@ if(nm){
   nm.style.webkitTextFillColor='transparent';
 }
 })();
+/* ===== AXIUM v19: PREMIUM INSTALL SHEET ===== */
+(function(){
+if(window.__ax19)return;window.__ax19=true;
+function ready(){
+ var s=document.getElementById('axSheet');
+ if(!s){setTimeout(ready,500);return;}
+ var deferred=null;
+ window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;});
+ var st=document.createElement('style');
+ st.textContent='#axSheet .card{overflow:hidden;position:relative}#axSheet .orbs i{position:absolute;border-radius:50%;opacity:.45;filter:blur(2px);animation:orbF 7s ease-in-out infinite;pointer-events:none}#axSheet .orbs i:nth-child(1){width:90px;height:90px;left:-30px;top:40px;background:radial-gradient(circle,#2b7dff,transparent 70%)}#axSheet .orbs i:nth-child(2){width:70px;height:70px;right:-20px;top:140px;background:radial-gradient(circle,#00c2d6,transparent 70%);animation-delay:1.2s}#axSheet .orbs i:nth-child(3){width:60px;height:60px;left:20px;bottom:60px;background:radial-gradient(circle,#7c5cff,transparent 70%);animation-delay:2.4s}#axSheet .iconWrap{position:relative;width:112px;height:112px;margin:0 auto}#axSheet .iconWrap img{width:88px;height:88px;border-radius:22px;position:relative;z-index:2;box-shadow:0 14px 34px rgba(43,125,255,.5);margin:12px}#axSheet .ring{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;border-top-color:#00c2d6;border-right-color:rgba(43,125,255,.6);animation:ringS 3s linear infinite}#axSheet .ring.r2{inset:9px;border-top-color:transparent;border-right-color:transparent;border-bottom-color:#7bb5ff;border-left-color:rgba(0,194,214,.5);animation:ringS 4s linear infinite reverse}#axSheet .spark{position:absolute;width:6px;height:6px;border-radius:50%;background:#7bb5ff;box-shadow:0 0 12px #7bb5ff;animation:twk 2.2s ease-in-out infinite;z-index:3}#axSheet .spark.s1{top:6px;left:14px}#axSheet .spark.s2{top:20px;right:6px;animation-delay:.7s;background:#00c2d6;box-shadow:0 0 12px #00c2d6}#axSheet .spark.s3{bottom:8px;left:40%;animation-delay:1.4s}#axSheet .pills{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:10px}#axSheet .pills span{padding:5px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#9fb6d4;font-size:.62rem;font-weight:800;letter-spacing:.5px}#axSheet .stats{display:flex;gap:8px;margin-top:12px}#axSheet .stats div{flex:1;background:rgba(43,125,255,.07);border:1px solid rgba(43,125,255,.2);border-radius:14px;padding:8px 4px;text-align:center}#axSheet .stats b{display:block;color:#7bb5ff;font-size:1rem;font-weight:900}#axSheet .stats span{color:#8a94a3;font-size:.58rem}#axSheet .ft{display:flex;align-items:center;gap:10px}#axSheet .ft i{font-style:normal;width:34px;height:34px;flex:none;border-radius:10px;background:linear-gradient(135deg,rgba(43,125,255,.25),rgba(0,194,214,.2));border:1px solid rgba(43,125,255,.35);display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 0 14px rgba(43,125,255,.15)}#axSheet.open .iconWrap{animation:axIconIn .7s .1s cubic-bezier(.34,1.56,.64,1) both}#axSheet.open .pills span{animation:pillIn .45s cubic-bezier(.34,1.56,.64,1) both}#axSheet.open .pills span:nth-child(1){animation-delay:.35s}#axSheet.open .pills span:nth-child(2){animation-delay:.42s}#axSheet.open .pills span:nth-child(3){animation-delay:.49s}#axSheet.open .pills span:nth-child(4){animation-delay:.56s}#axSheet.open .stats div{animation:pillIn .5s cubic-bezier(.34,1.56,.64,1) both}#axSheet.open .stats div:nth-child(1){animation-delay:.62s}#axSheet.open .stats div:nth-child(2){animation-delay:.7s}#axSheet.open .stats div:nth-child(3){animation-delay:.78s}#axSheet.open .ft{animation:axFeatIn .5s cubic-bezier(.34,1.56,.64,1) both}#axSheet.open .ft:nth-of-type(1){animation-delay:.88s}#axSheet.open .ft:nth-of-type(2){animation-delay:.98s}#axSheet.open .ft:nth-of-type(3){animation-delay:1.08s}#axSheet.open .ft:nth-of-type(4){animation-delay:1.18s}#axSheet.open .ins{animation:axBtnIn .55s 1.3s cubic-bezier(.34,1.56,.64,1) both,axBtnPulse 2.2s 2s ease-out infinite}#axSheet.open .no{animation:axTextIn .4s 1.45s both}@keyframes orbF{0%,100%{transform:translate(0,0)}50%{transform:translate(14px,-18px)}}@keyframes ringS{to{transform:rotate(360deg)}}@keyframes twk{0%,100%{opacity:0;transform:scale(.4)}50%{opacity:1;transform:scale(1.1)}}@keyframes pillIn{from{opacity:0;transform:translateY(14px) scale(.8)}to{opacity:1;transform:none}}';
+ document.head.appendChild(st);
+ s.innerHTML='<div class="card"><div class="orbs"><i></i><i></i><i></i></div><div class="iconWrap"><span class="ring"></span><span class="ring r2"></span><span class="spark s1"></span><span class="spark s2"></span><span class="spark s3"></span><img src="icon.svg" alt="AXIUM"></div><div class="nm">AXIUM</div><div class="tg">AI-POWERED PRODUCTIVITY</div><div class="pills"><span>★ 4.9</span><span>FREE</span><span>2 MB</span><span>VERIFIED ✓</span></div><div class="stats"><div><b data-n="12">0</b><span>Smart tools</span></div><div><b data-n="4.9" data-d="1">0</b><span>Rating</span></div><div><b data-n="100" data-s="%">0</b><span>Free forever</span></div></div><div class="ft"><i>🔔</i>Smart coach & real notifications</div><div class="ft"><i>📋</i>Tasks, calendar, notes & AI</div><div class="ft"><i>📊</i>Real energy & streak stats</div><div class="ft"><i>🌙</i>Works offline & fullscreen</div><button class="ins" id="axSheetInstall">⬇ INSTALL</button><div class="gd" id="axSheetGuide">1️⃣ Browser menu (⋮)<br>2️⃣ <b>Add to Home screen / Install app</b><br>3️⃣ Confirm → done! 🎉</div><button class="no" id="axSheetClose">Not now</button></div>';
+ var done=false;
+ function runCounters(){
+  s.querySelectorAll('.stats b').forEach(function(b){
+   var n=parseFloat(b.dataset.n||'0'),d=parseInt(b.dataset.d||'0'),suf=b.dataset.s||'',t0=performance.now();
+   (function tick(now){
+    var p=Math.min(1,(now-t0)/1200);
+    var v=n*(1-Math.pow(1-p,3));
+    b.textContent=(d?v.toFixed(d):Math.round(v))+suf;
+    if(p<1)requestAnimationFrame(tick);
+   })(t0);
+  });
+ }
+ new MutationObserver(function(){
+  if(s.classList.contains('open')&&!done){done=true;runCounters();}
+ }).observe(s,{attributes:true,attributeFilter:['class']});
+ s.addEventListener('click',function(e){if(e.target===s)s.classList.remove('open');});
+ document.getElementById('axSheetClose').onclick=function(){s.classList.remove('open');};
+ document.getElementById('axSheetInstall').onclick=function(){
+  if(deferred){
+   deferred.prompt();
+   deferred.userChoice.then(function(r){
+    if(r&&r.outcome==='accepted'){s.classList.remove('open');if(window.toast)toast('AXIUM installed 🎉');}
+    else{document.getElementById('axSheetGuide').style.display='block';}
+   });
+   deferred=null;
+  }else{
+   document.getElementById('axSheetGuide').style.display='block';
+  }
+ };
+}
+ready();
+})();
