@@ -202,3 +202,26 @@ function ready(){
 }
 ready();
 })();
+/* ===== AXIUM v24: RICH NOTIFICATION CARDS ===== */
+(function(){
+if(window.__ax24)return;window.__ax24=true;
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function ago(t){var s=Math.floor((Date.now()-t)/1000);if(s<60)return'just now';var m=Math.floor(s/60);if(m<60)return m+'m ago';var h=Math.floor(m/60);if(h<24)return h+'h ago';return Math.floor(h/24)+'d ago';}
+function rebuild(){
+ var list=document.getElementById('axList');if(!list)return;
+ var st;try{st=JSON.parse(localStorage.getItem('axNotifyV7'))}catch(e){}
+ if(!st)return;
+ var sig=JSON.stringify(st.list.map(function(n){return n.t;}));
+ if(list.dataset.sig===sig)return;
+ list.dataset.sig=sig;
+ if(!st.list.length){list.innerHTML='<div class="axn-empty">🌙 No notifications yet — your coach is quiet... for now</div>';return;}
+ list.innerHTML=st.list.slice(0,20).map(function(n,i){
+  return '<div class="axn-i ax24i" style="animation-delay:'+(i*0.06)+'s"><div class="ax24ic">'+n.icon+'</div><div class="ax24tx"><div class="t">'+esc(n.title)+'</div><div class="b">'+esc(n.body)+'</div><div class="d">'+ago(n.t)+'</div></div></div>';
+ }).join('');
+}
+var st2=document.createElement('style');
+st2.textContent='#axPanel .ax24i{display:flex;gap:10px;align-items:flex-start}#axPanel .ax24ic{width:38px;height:38px;flex:none;border-radius:12px;background:linear-gradient(135deg,rgba(43,125,255,.3),rgba(0,194,214,.2));border:1px solid rgba(43,125,255,.4);display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 0 14px rgba(43,125,255,.2)}#axPanel .ax24tx{flex:1;min-width:0}';
+document.head.appendChild(st2);
+rebuild();setInterval(rebuild,1500);
+setInterval(function(){var l=document.getElementById('axList');if(l)l.dataset.sig='';},30000);
+})();
