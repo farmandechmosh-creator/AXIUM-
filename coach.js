@@ -553,3 +553,28 @@ function hook(){
 }
 hook();setInterval(hook,1500);
 })();
+/* ===== AXIUM v27: LIVING AVATAR RINGS ===== */
+(function(){
+if(window.__ax27)return;window.__ax27=true;
+function fix(){
+ var s=document.getElementById('axAcctSheet26');
+ if(!s){setTimeout(fix,800);return;}
+ var av=s.querySelector('#axAcAv');
+ if(!av){setTimeout(fix,800);return;}
+ var wrap=av.parentNode;
+ if(wrap.querySelector('.h26'))return;
+ var st=document.createElement('style');
+ st.textContent='.h26{position:absolute;inset:-14px;border-radius:28px;background:conic-gradient(from 0deg,transparent 0 60%,rgba(43,125,255,.65) 82%,rgba(0,194,214,.9) 92%,transparent 100%);filter:blur(5px);animation:ax26spin 3.2s linear infinite;will-change:transform;z-index:0}.r26a{position:absolute;inset:-6px;border-radius:22px;border:1.5px dashed rgba(123,181,255,.55);animation:ax26spin 9s linear infinite reverse;will-change:transform}.r26b{position:absolute;inset:-6px;border-radius:22px;border:1px solid rgba(0,194,214,.5);animation:ax26ping 2.4s ease-out infinite;will-change:transform,opacity}@keyframes ax26ping{0%{transform:scale(.85);opacity:.8}100%{transform:scale(1.35);opacity:0}}#axAcAv{position:relative;z-index:1}';
+ document.head.appendChild(st);
+ wrap.querySelectorAll('span').forEach(function(sp){
+  if((sp.getAttribute('style')||'').indexOf('ax26spin')>-1)sp.remove();
+ });
+ var h=document.createElement('span');h.className='h26';
+ var a=document.createElement('span');a.className='r26a';
+ var b=document.createElement('span');b.className='r26b';
+ wrap.insertBefore(b,wrap.firstChild);
+ wrap.insertBefore(a,wrap.firstChild);
+ wrap.insertBefore(h,wrap.firstChild);
+}
+fix();
+})();
