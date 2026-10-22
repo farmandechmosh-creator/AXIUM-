@@ -308,3 +308,96 @@ function ready(){
 }
 ready();
 })();
+/* ===== AXIUM v25: ACCOUNT PAGE ===== */
+(function(){
+if(window.__ax25)return;window.__ax25=true;
+var ACC={blue:'#2b7dff',violet:'#7c5cff',cyan:'#00c2d6',orange:'#ff9f1a',green:'#16c784'};
+function prefs(){try{return JSON.parse(localStorage.getItem('axium_prefs'))||{}}catch(e){return{}}}
+function saveP(p){localStorage.setItem('axium_prefs',JSON.stringify(p));}
+function stats(){
+ var t=[];try{t=JSON.parse(localStorage.getItem('axium_tasks'))||[]}catch(e){}
+ var done=t.filter(function(x){return x.done;}).length;
+ var min=parseInt(localStorage.getItem('axium_minutes')||'0',10)||0;
+ var st={count:0};try{st=JSON.parse(localStorage.getItem('axium_streak'))||{count:0}}catch(e){}
+ return{done:done,min:min,streak:st.count||0};
+}
+function sheet(){
+ var old=document.getElementById('axAcctSheet');if(old)return old;
+ var s=document.createElement('div');s.id='axAcctSheet';
+ s.style.cssText='position:fixed;inset:0;z-index:100001;background:rgba(5,8,13,.75);backdrop-filter:blur(10px);display:none;align-items:flex-end;justify-content:center';
+ s.innerHTML='<div style="width:min(480px,100vw);max-height:88vh;overflow-y:auto;background:linear-gradient(170deg,#101828,#0a0f1a);border:1px solid rgba(43,125,255,.4);border-radius:28px 28px 0 0;padding:20px 20px 34px;box-shadow:0 -20px 70px rgba(0,0,0,.7)">'+
+  '<div style="width:52px;height:5px;border-radius:3px;background:rgba(255,255,255,.2);margin:0 auto 16px"></div>'+
+  '<div style="display:flex;align-items:center;gap:14px">'+
+   '<div id="axAcAv" style="width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,#2b7dff,#00c2d6);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.6rem;color:#fff;box-shadow:0 10px 26px rgba(43,125,255,.45)">A</div>'+
+   '<div style="flex:1"><div id="axAcName" style="color:#eef2f7;font-weight:900;font-size:1.15rem">Alireza</div><div style="color:#3fd67a;font-size:.65rem;font-weight:800;letter-spacing:1px">PRO PLAN · LOCAL ACCOUNT</div></div>'+
+   '<button id="axAcX" type="button" style="width:36px;height:36px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#9aa4b2;font-size:1rem;cursor:pointer">✕</button>'+
+  '</div>'+
+  '<div style="display:flex;gap:8px;margin-top:16px">'+
+   '<div style="flex:1;background:rgba(43,125,255,.08);border:1px solid rgba(43,125,255,.25);border-radius:14px;padding:10px;text-align:center"><b id="axAcS1" style="display:block;color:#7bb5ff;font-size:1.1rem">0</b><span style="color:#8a94a3;font-size:.58rem">Tasks done</span></div>'+
+   '<div style="flex:1;background:rgba(124,92,255,.08);border:1px solid rgba(124,92,255,.25);border-radius:14px;padding:10px;text-align:center"><b id="axAcS2" style="display:block;color:#b388ff;font-size:1.1rem">0m</b><span style="color:#8a94a3;font-size:.58rem">Focus</span></div>'+
+   '<div style="flex:1;background:rgba(255,159,26,.08);border:1px solid rgba(255,159,26,.25);border-radius:14px;padding:10px;text-align:center"><b id="axAcS3" style="display:block;color:#ffb443;font-size:1.1rem">0</b><span style="color:#8a94a3;font-size:.58rem">Streak</span></div>'+
+  '</div>'+
+  '<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">'+
+   '<label style="color:#8a94a3;font-size:.62rem;font-weight:800;letter-spacing:1px">YOUR NAME</label>'+
+   '<input id="axAcInN" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eef2f7;outline:none;font-family:inherit" placeholder="Name">'+
+   '<label style="color:#8a94a3;font-size:.62rem;font-weight:800;letter-spacing:1px">YOUR CITY</label>'+
+   '<input id="axAcInC" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eef2f7;outline:none;font-family:inherit" placeholder="City">'+
+   '<label style="color:#8a94a3;font-size:.62rem;font-weight:800;letter-spacing:1px">ACCENT COLOR</label>'+
+   '<div id="axAcSw" style="display:flex;gap:8px"></div>'+
+   '<button id="axAcSave" type="button" style="width:100%;margin-top:6px;padding:14px;border:none;border-radius:16px;background:linear-gradient(135deg,#2b7dff,#1a6ae0);color:#fff;font-weight:900;cursor:pointer;box-shadow:0 10px 26px rgba(43,125,255,.4)">💾 Save profile</button>'+
+   '<button id="axAcInstall" type="button" style="width:100%;padding:13px;border-radius:16px;border:1px solid rgba(63,214,122,.5);background:rgba(22,199,132,.1);color:#7ae8b0;font-weight:800;cursor:pointer">📦 Install AXIUM app</button>'+
+   '<button id="axAcReset" type="button" style="width:100%;padding:13px;border-radius:16px;border:1px solid rgba(255,107,107,.4);background:rgba(255,107,107,.08);color:#ff6b6b;font-weight:800;cursor:pointer">🧨 Reset all data</button>'+
+  '</div>'+
+ '</div>';
+ document.body.appendChild(s);
+ var sw=s.querySelector('#axAcSw');
+ function applyAccent(k){var r=document.documentElement.style;r.setProperty('--blue',ACC[k]);}
+ Object.keys(ACC).forEach(function(k){
+  var b=document.createElement('button');b.type='button';b.dataset.a=k;
+  b.style.cssText='width:38px;height:38px;border-radius:12px;border:2px solid transparent;background:'+ACC[k]+';cursor:pointer;box-shadow:0 4px 14px '+ACC[k]+'55';
+  b.onclick=function(){sw.querySelectorAll('button').forEach(function(x){x.style.borderColor='transparent';});b.style.borderColor='#fff';saveP(Object.assign(prefs(),{accent:k}));applyAccent(k);};
+  sw.appendChild(b);
+ });
+ s.querySelector('#axAcX').onclick=function(){s.style.display='none';};
+ s.addEventListener('click',function(e){if(e.target===s)s.style.display='none';});
+ s.querySelector('#axAcSave').onclick=function(){
+  var p=prefs();
+  var n=s.querySelector('#axAcInN').value.trim();if(n)p.name=n;
+  var c=s.querySelector('#axAcInC').value.trim();if(c)p.city=c;
+  saveP(p);s._refresh();
+  var dn=document.querySelector('.drawer-profile-info strong');if(dn&&p.name)dn.textContent=p.name;
+  if(window.toast)toast('Profile saved ✅');
+ };
+ s.querySelector('#axAcInstall').onclick=function(){var sh=document.getElementById('axSheet');if(sh){s.style.display='none';sh.classList.add('open');}};
+ s.querySelector('#axAcReset').onclick=function(){
+  if(confirm('Reset ALL AXIUM data? This cannot be undone.')){
+   ['axium_tasks','axium_notes','axium_prefs','axium_minutes','axium_streak','axium_daily','axium_schedule','axium_goals','axium_events','axium_notes_final','axNotifyV6'].forEach(function(k){localStorage.removeItem(k);});
+   location.reload();
+  }
+ };
+ s._refresh=function(){
+  var p=prefs(),st=stats();
+  s.querySelector('#axAcName').textContent=p.name||'Alireza';
+  s.querySelector('#axAcAv').textContent=(p.name||'A').charAt(0).toUpperCase();
+  s.querySelector('#axAcInN').value=p.name||'';
+  s.querySelector('#axAcInC').value=p.city||'';
+  s.querySelector('#axAcS1').textContent=st.done;
+  s.querySelector('#axAcS2').textContent=st.min>=60?Math.floor(st.min/60)+'h':st.min+'m';
+  s.querySelector('#axAcS3').textContent=st.streak;
+  var act=(p.accent||'blue');
+  sw.querySelectorAll('button').forEach(function(x){x.style.borderColor=x.dataset.a===act?'#fff':'transparent';});
+ };
+ return s;
+}
+function hook(){
+ var b=document.getElementById('axAcct');
+ if(!b){setTimeout(hook,800);return;}
+ if(b.dataset.h25)return;b.dataset.h25='1';
+ var st=document.createElement('style');st.textContent='@keyframes ax25up{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}';document.head.appendChild(st);
+ b.addEventListener('click',function(){
+  var s=sheet();s._refresh();s.style.display='flex';
+  var card=s.firstChild;card.style.animation='none';void card.offsetWidth;card.style.animation='ax25up .55s cubic-bezier(.34,1.56,.64,1) both';
+ });
+}
+hook();setInterval(hook,1500);
+})();
