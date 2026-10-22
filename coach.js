@@ -401,3 +401,155 @@ function hook(){
 }
 hook();setInterval(hook,1500);
 })();
+/* ===== AXIUM v26: ACCOUNT PAGE PRO ===== */
+(function(){
+if(window.__ax26)return;window.__ax26=true;
+var ACC={blue:'#2b7dff',violet:'#7c5cff',cyan:'#00c2d6',orange:'#ff9f1a',green:'#16c784'};
+function prefs(){try{return JSON.parse(localStorage.getItem('axium_prefs'))||{}}catch(e){return{}}}
+function saveP(p){localStorage.setItem('axium_prefs',JSON.stringify(p));}
+function accts(){try{var a=JSON.parse(localStorage.getItem('axium_accounts'));return Array.isArray(a)?a:[]}catch(e){return[]}}
+function saveA(a){localStorage.setItem('axium_accounts',JSON.stringify(a));}
+function stats(){
+ var t=[];try{t=JSON.parse(localStorage.getItem('axium_tasks'))||[]}catch(e){}
+ var done=t.filter(function(x){return x.done;}).length;
+ var min=parseInt(localStorage.getItem('axium_minutes')||'0',10)||0;
+ var st={count:0};try{st=JSON.parse(localStorage.getItem('axium_streak'))||{count:0}}catch(e){}
+ return{done:done,min:min,streak:st.count||0};
+}
+function storageKB(){var t=0;for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('axium')===0)t+=k.length+(localStorage.getItem(k)||'').length;}return (t/1024).toFixed(1);}
+function sheet(){
+ var old=document.getElementById('axAcctSheet26');if(old)return old;
+ var o=document.getElementById('axAcctSheet');if(o)o.remove();
+ var s=document.createElement('div');s.id='axAcctSheet26';
+ s.style.cssText='position:fixed;inset:0;z-index:100002;background:rgba(5,8,13,.78);backdrop-filter:blur(12px);display:none;align-items:flex-end;justify-content:center';
+ s.innerHTML='<div style="position:relative;width:min(480px,100vw);max-height:90vh;overflow-y:auto;overflow-x:hidden;background:linear-gradient(170deg,#101828,#0a0f1a);border:1px solid rgba(43,125,255,.4);border-radius:28px 28px 0 0;padding:18px 20px 36px;box-shadow:0 -20px 70px rgba(0,0,0,.7);animation:ax26up .6s cubic-bezier(.34,1.56,.64,1) both">'+
+  '<div style="position:absolute;inset:0;pointer-events:none;overflow:hidden"><i style="position:absolute;width:120px;height:120px;left:-40px;top:30px;border-radius:50%;background:radial-gradient(circle,rgba(43,125,255,.5),transparent 70%);filter:blur(6px);animation:ax26orb 8s ease-in-out infinite"></i><i style="position:absolute;width:90px;height:90px;right:-30px;top:160px;border-radius:50%;background:radial-gradient(circle,rgba(0,194,214,.45),transparent 70%);filter:blur(6px);animation:ax26orb 9s 1s ease-in-out infinite reverse"></i></div>'+
+  '<div style="width:52px;height:5px;border-radius:3px;background:rgba(255,255,255,.2);margin:0 auto 14px;position:relative"></div>'+
+  '<div style="display:flex;align-items:center;gap:14px;position:relative" data-a=".05s">'+
+   '<div style="position:relative;width:68px;height:68px;flex:none"><span style="position:absolute;inset:-7px;border-radius:24px;border:2px solid transparent;border-top-color:#00c2d6;border-right-color:rgba(43,125,255,.6);animation:ax26spin 3s linear infinite"></span><span style="position:absolute;top:-4px;right:-2px;width:6px;height:6px;border-radius:50%;background:#7bb5ff;box-shadow:0 0 10px #7bb5ff;animation:ax26tw 2s ease-in-out infinite"></span><div id="axAcAv" style="width:68px;height:68px;border-radius:22px;background:linear-gradient(135deg,#2b7dff,#00c2d6);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.7rem;color:#fff;box-shadow:0 10px 26px rgba(43,125,255,.45);animation:ax26pop .6s .1s cubic-bezier(.34,1.56,.64,1) both">A</div></div>'+
+   '<div style="flex:1;min-width:0"><div id="axAcName" style="color:#eef2f7;font-weight:900;font-size:1.2rem;background:linear-gradient(90deg,#fff,#7bb5ff,#00c2d6,#fff);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:ax26shine 4s linear infinite">Alireza</div><div style="color:#3fd67a;font-size:.62rem;font-weight:800;letter-spacing:1.5px;margin-top:2px">PRO PLAN · LOCAL ACCOUNT</div></div>'+
+   '<button id="axAcX" type="button" style="width:36px;height:36px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#9aa4b2;font-size:1rem;cursor:pointer">✕</button>'+
+  '</div>'+
+  '<div style="display:flex;gap:8px;margin-top:16px;position:relative">'+
+   '<div data-a=".15s" style="flex:1;background:rgba(43,125,255,.08);border:1px solid rgba(43,125,255,.25);border-radius:14px;padding:10px;text-align:center"><b id="axAcS1" style="display:block;color:#7bb5ff;font-size:1.15rem;font-weight:900">0</b><span style="color:#8a94a3;font-size:.58rem">Tasks done</span></div>'+
+   '<div data-a=".22s" style="flex:1;background:rgba(124,92,255,.08);border:1px solid rgba(124,92,255,.25);border-radius:14px;padding:10px;text-align:center"><b id="axAcS2" style="display:block;color:#b388ff;font-size:1.15rem;font-weight:900">0m</b><span style="color:#8a94a3;font-size:.58rem">Focus</span></div>'+
+   '<div data-a=".29s" style="flex:1;background:rgba(255,159,26,.08);border:1px solid rgba(255,159,26,.25);border-radius:14px;padding:10px;text-align:center"><b id="axAcS3" style="display:block;color:#ffb443;font-size:1.15rem;font-weight:900">0</b><span style="color:#8a94a3;font-size:.58rem">Streak</span></div>'+
+  '</div>'+
+  '<div style="margin-top:16px;position:relative" data-a=".36s"><div style="color:#7bb5ff;font-size:.66rem;font-weight:900;letter-spacing:1.5px;margin-bottom:8px">🔄 ACCOUNTS</div><div id="axAcList" style="display:flex;flex-direction:column;gap:8px"></div><button id="axAcAdd" type="button" style="width:100%;margin-top:8px;padding:11px;border-radius:14px;border:1px dashed rgba(43,125,255,.5);background:rgba(43,125,255,.08);color:#7bb5ff;font-weight:800;font-size:.75rem;cursor:pointer">➕ Add / switch account</button><div id="axAcForm" style="display:none;margin-top:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px;display:none"><input id="axAcFN" placeholder="New account name" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eef2f7;outline:none;margin-bottom:8px;font-family:inherit"><input id="axAcFC" placeholder="City (optional)" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eef2f7;outline:none;margin-bottom:8px;font-family:inherit"><button id="axAcFOk" type="button" style="width:100%;padding:11px;border:none;border-radius:12px;background:linear-gradient(135deg,#16c784,#0fa06a);color:#fff;font-weight:800;cursor:pointer">Create & switch</button></div></div>'+
+  '<div style="margin-top:16px;position:relative;display:flex;flex-direction:column;gap:8px">'+
+   '<div style="color:#7bb5ff;font-size:.66rem;font-weight:900;letter-spacing:1.5px" data-a=".43s">✏️ PROFILE</div>'+
+   '<input id="axAcInN" data-a=".5s" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eef2f7;outline:none;font-family:inherit" placeholder="Name">'+
+   '<input id="axAcInC" data-a=".57s" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eef2f7;outline:none;font-family:inherit" placeholder="City">'+
+   '<div style="color:#7bb5ff;font-size:.66rem;font-weight:900;letter-spacing:1.5px;margin-top:4px" data-a=".64s">🎨 ACCENT COLOR</div>'+
+   '<div id="axAcSw" style="display:flex;gap:8px" data-a=".7s"></div>'+
+   '<div style="color:#7bb5ff;font-size:.66rem;font-weight:900;letter-spacing:1.5px;margin-top:8px" data-a=".77s">📄 DETAILS</div>'+
+   '<div data-a=".83s" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:4px 12px"><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.08);color:#8a94a3;font-size:.68rem"><span>Member since</span><b id="axAcD1" style="color:#c5cfdb">—</b></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.08);color:#8a94a3;font-size:.68rem"><span>Version</span><b style="color:#c5cfdb">1.1.4</b></div><div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.08);color:#8a94a3;font-size:.68rem"><span>Storage used</span><b id="axAcD3" style="color:#c5cfdb">0 KB</b></div><div style="display:flex;justify-content:space-between;padding:8px 0;color:#8a94a3;font-size:.68rem"><span>Language</span><b style="color:#c5cfdb">Auto (EN/FA)</b></div></div>'+
+   '<button id="axAcSave" type="button" data-a=".9s" style="position:relative;overflow:hidden;width:100%;margin-top:6px;padding:14px;border:none;border-radius:16px;background:linear-gradient(135deg,#2b7dff,#1a6ae0);color:#fff;font-weight:900;cursor:pointer;box-shadow:0 10px 26px rgba(43,125,255,.4)">💾 Save profile</button>'+
+   '<button id="axAcInstall" type="button" data-a=".97s" style="width:100%;padding:13px;border-radius:16px;border:1px solid rgba(63,214,122,.5);background:rgba(22,199,132,.1);color:#7ae8b0;font-weight:800;cursor:pointer">📦 Install AXIUM app</button>'+
+   '<button id="axAcReset" type="button" data-a="1.04s" style="width:100%;padding:13px;border-radius:16px;border:1px solid rgba(255,107,107,.4);background:rgba(255,107,107,.08);color:#ff6b6b;font-weight:800;cursor:pointer">🧨 Reset all data</button>'+
+  '</div>'+
+ '</div>';
+ document.body.appendChild(s);
+ var stl=document.createElement('style');
+ stl.textContent='#axAcctSheet26 [data-a]{animation:ax26in .55s cubic-bezier(.34,1.56,.64,1) both}@keyframes ax26up{from{transform:translateY(80px);opacity:0}to{transform:none;opacity:1}}@keyframes ax26in{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}@keyframes ax26orb{0%,100%{transform:translate(0,0)}50%{transform:translate(16px,-20px)}}@keyframes ax26spin{to{transform:rotate(360deg)}}@keyframes ax26tw{0%,100%{opacity:0;transform:scale(.4)}50%{opacity:1;transform:scale(1.1)}}@keyframes ax26pop{from{transform:scale(.4) rotate(-12deg);opacity:0}60%{transform:scale(1.08) rotate(3deg)}to{transform:scale(1);opacity:1}}@keyframes ax26shine{0%{background-position:0% 50%}100%{background-position:200% 50%}}';
+ document.head.appendChild(stl);
+ var sw=s.querySelector('#axAcSw');
+ function applyAccent(k){var r=document.documentElement.style;r.setProperty('--blue',ACC[k]);}
+ Object.keys(ACC).forEach(function(k,i){
+  var b=document.createElement('button');b.type='button';b.dataset.a=k;
+  b.style.cssText='width:38px;height:38px;border-radius:12px;border:2px solid transparent;background:'+ACC[k]+';cursor:pointer;box-shadow:0 4px 14px '+ACC[k]+'55;animation:ax26pop .5s '+(0.7+i*0.07)+'s cubic-bezier(.34,1.56,.64,1) both';
+  b.onclick=function(){sw.querySelectorAll('button').forEach(function(x){x.style.borderColor='transparent';});b.style.borderColor='#fff';saveP(Object.assign(prefs(),{accent:k}));applyAccent(k);};
+  sw.appendChild(b);
+ });
+ function renderAccts(){
+  var L=s.querySelector('#axAcList');L.innerHTML='';
+  var p=prefs(),list=accts();
+  if(!list.length&&!p.name){L.innerHTML='<div style="color:#5b6472;font-size:.7rem;text-align:center;padding:10px;border:1px dashed rgba(255,255,255,.12);border-radius:12px">No saved accounts yet — create one below</div>';return;}
+  var cur={id:p.acctId||'current',name:p.name||'Alireza',city:p.city||''};
+  var all=list.slice();if(!all.some(function(a){return a.id===cur.id;}))all.unshift(cur);
+  all.forEach(function(a,i){
+   var row=document.createElement('div');
+   var act=a.id===cur.id;
+   row.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;border:1px solid '+(act?'rgba(63,214,122,.5)':'rgba(255,255,255,.1)')+';background:'+(act?'rgba(63,214,122,.08)':'rgba(255,255,255,.04)')+';cursor:pointer;animation:ax26in .45s '+(0.36+i*0.07)+'s both';
+   row.innerHTML='<div style="width:36px;height:36px;flex:none;border-radius:11px;background:linear-gradient(135deg,'+(ACC[a.accent]||'#2b7dff')+',#00c2d6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900">'+(a.name||'A').charAt(0).toUpperCase()+'</div><div style="flex:1;min-width:0"><div style="color:#eef2f7;font-size:.8rem;font-weight:800">'+(a.name||'Alireza')+(act?' ✓':'')+'</div><div style="color:#8a94a3;font-size:.6rem">'+(a.city||'—')+'</div></div>'+(act?'':'<button type="button" style="border:none;background:none;color:#5b6472;cursor:pointer;font-size:.8rem">✕</button>');
+   row.onclick=function(){switchTo(a);};
+   var del=row.querySelector('button');
+   if(del)del.onclick=function(e){e.stopPropagation();saveA(accts().filter(function(x){return x.id!==a.id;}));renderAccts();if(window.toast)toast('Account removed 🗑');};
+   L.appendChild(row);
+  });
+ }
+ function switchTo(a){
+  var p=prefs();
+  p.name=a.name||p.name;p.city=a.city||p.city;p.accent=a.accent||p.accent;p.acctId=a.id;
+  if(!p.since)p.since=new Date().toISOString().slice(0,10);
+  saveP(p);applyAccent(p.accent||'blue');
+  var dn=document.querySelector('.drawer-profile-info strong');if(dn&&p.name)dn.textContent=p.name;
+  refresh();renderAccts();
+  if(window.toast)toast('Switched to '+p.name+' 🔄');
+ }
+ s.querySelector('#axAcAdd').onclick=function(){var f=s.querySelector('#axAcForm');f.style.display=f.style.display==='block'?'none':'block';};
+ s.querySelector('#axAcFOk').onclick=function(){
+  var n=s.querySelector('#axAcFN').value.trim();if(!n){if(window.toast)toast('Name required ✍️');return;}
+  var a={id:'a'+Date.now(),name:n,city:s.querySelector('#axAcFC').value.trim(),accent:prefs().accent||'blue'};
+  var list=accts();var p0=prefs();if(p0.name&&!list.some(function(x){return x.id===(p0.acctId||'current');}))list.unshift({id:p0.acctId||'current',name:p0.name,city:p0.city||'',accent:p0.accent||'blue'});
+  list.push(a);saveA(list);
+  s.querySelector('#axAcFN').value='';s.querySelector('#axAcFC').value='';
+  s.querySelector('#axAcForm').style.display='none';
+  switchTo(a);
+ };
+ s.querySelector('#axAcX').onclick=function(){s.style.display='none';};
+ s.addEventListener('click',function(e){if(e.target===s)s.style.display='none';});
+ s.querySelector('#axAcSave').onclick=function(e){
+  var p=prefs();
+  var n=s.querySelector('#axAcInN').value.trim();if(n)p.name=n;
+  var c=s.querySelector('#axAcInC').value.trim();if(c)p.city=c;
+  if(!p.since)p.since=new Date().toISOString().slice(0,10);
+  saveP(p);refresh();renderAccts();
+  var dn=document.querySelector('.drawer-profile-info strong');if(dn&&p.name)dn.textContent=p.name;
+  var r=e.currentTarget.getBoundingClientRect();var d=document.createElement('span');d.style.cssText='position:absolute;border-radius:50%;background:rgba(255,255,255,.5);width:12px;height:12px;left:'+(e.clientX-r.left)+'px;top:'+(e.clientY-r.top)+'px;transform:scale(0);animation:ax23rip .6s ease-out forwards;pointer-events:none';e.currentTarget.appendChild(d);setTimeout(function(){d.remove();},700);
+  if(window.toast)toast('Profile saved ✅');
+ };
+ s.querySelector('#axAcInstall').onclick=function(){var sh=document.getElementById('axSheet');if(sh){s.style.display='none';sh.classList.add('open');}};
+ s.querySelector('#axAcReset').onclick=function(){
+  if(confirm('Reset ALL AXIUM data? This cannot be undone.')){
+   ['axium_tasks','axium_notes','axium_prefs','axium_minutes','axium_streak','axium_daily','axium_schedule','axium_goals','axium_events','axium_notes_final','axium_accounts','axNotifyV6'].forEach(function(k){localStorage.removeItem(k);});
+   location.reload();
+  }
+ };
+ function counters(){
+  var st=stats();
+  var el1=s.querySelector('#axAcS1'),el2=s.querySelector('#axAcS2'),el3=s.querySelector('#axAcS3');
+  var t0=performance.now();
+  (function tick(now){
+   var p=Math.min(1,(now-t0)/900),e=1-Math.pow(1-p,3);
+   if(el1)el1.textContent=Math.round(st.done*e);
+   if(el2)el2.textContent=Math.round(st.min*e)+'m';
+   if(el3)el3.textContent=Math.round(st.streak*e);
+   if(p<1)requestAnimationFrame(tick);
+  })(t0);
+ }
+ s._open=function(){refresh();renderAccts();counters();};
+ function refresh(){
+  var p=prefs();
+  s.querySelector('#axAcName').textContent=p.name||'Alireza';
+  s.querySelector('#axAcAv').textContent=(p.name||'A').charAt(0).toUpperCase();
+  s.querySelector('#axAcInN').value=p.name||'';
+  s.querySelector('#axAcInC').value=p.city||'';
+  s.querySelector('#axAcD1').textContent=p.since||new Date().toISOString().slice(0,10);
+  s.querySelector('#axAcD3').textContent=storageKB()+' KB';
+  var act=(p.accent||'blue');
+  sw.querySelectorAll('button').forEach(function(x){x.style.borderColor=x.dataset.a===act?'#fff':'transparent';});
+ }
+ return s;
+}
+function hook(){
+ var b=document.getElementById('axAcct');
+ if(!b){setTimeout(hook,800);return;}
+ if(b.dataset.h26)return;b.dataset.h26='1';
+ var nb=b.cloneNode(true);b.parentNode.replaceChild(nb,b);
+ nb.addEventListener('click',function(){
+  var s=sheet();s.style.display='flex';s._open();
+ });
+}
+hook();setInterval(hook,1500);
+})();
