@@ -713,3 +713,102 @@ function addToggle(){
 }
 addToggle();
 })();
+/* ===== AXIUM v32: BUDDY CHARACTER + FIRST-VISIT TOUR ===== */
+(function(){
+if(window.__ax32)return;window.__ax32=true;
+var DONE=localStorage.getItem('axium_tour_done')==='1';
+var st=document.createElement('style');
+st.textContent='#axBuddy{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:100010;width:74px;height:74px;display:none;cursor:pointer;transition:left .9s cubic-bezier(.5,0,.2,1),bottom .9s cubic-bezier(.5,0,.2,1),opacity .4s}#axBuddy .body{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 32% 28%,#3b8bff,#1656c9 62%,#00c2d6);box-shadow:0 10px 30px rgba(43,125,255,.55),0 0 40px rgba(0,194,214,.35);animation:axBFloat 3s ease-in-out infinite}#axBuddy .eye{position:absolute;top:26px;width:10px;height:14px;border-radius:50%;background:#fff;animation:axBBlink 4s infinite}#axBuddy .eye.l{left:22px}#axBuddy .eye.r{right:22px}#axBuddy .mouth{position:absolute;left:50%;top:44px;width:16px;height:8px;margin-left:-8px;border-radius:0 0 10px 10px;border:2px solid #fff;border-top:none}#axBuddy .ant{position:absolute;top:-10px;left:50%;width:3px;height:12px;margin-left:-1px;background:#7bb5ff;border-radius:2px}#axBuddy .ant i{position:absolute;top:-6px;left:-3px;width:9px;height:9px;border-radius:50%;background:#00c2d6;box-shadow:0 0 12px #00c2d6;animation:ax22tw2 1.6s infinite}#axBub{position:fixed;left:50%;bottom:178px;transform:translateX(-50%);z-index:100009;width:min(360px,calc(100vw - 24px));background:rgba(13,20,34,.97);border:1px solid rgba(43,125,255,.5);border-radius:20px;padding:14px 16px;display:none;box-shadow:0 20px 50px rgba(0,0,0,.6),0 0 30px rgba(43,125,255,.2)}#axBub::after{content:"";position:absolute;left:50%;bottom:-8px;width:14px;height:14px;margin-left:-7px;background:inherit;border-right:1px solid rgba(43,125,255,.5);border-bottom:1px solid rgba(43,125,255,.5);transform:rotate(45deg)}#axBub .tx{color:#eef2f7;font-size:.8rem;line-height:1.7;min-height:44px}#axBub .tx b{color:#7bb5ff}#axBub .btns{display:flex;gap:8px;margin-top:10px}#axBub .btns button{flex:1;padding:10px;border-radius:12px;border:none;font-weight:800;font-size:.72rem;cursor:pointer}#axBub .go{background:linear-gradient(135deg,#2b7dff,#1a6ae0);color:#fff}#axBub .no{background:rgba(255,255,255,.07);color:#8a94a3}.axTourHl{position:relative;box-shadow:0 0 0 3px rgba(43,125,255,.85),0 0 44px rgba(43,125,255,.45)!important;border-radius:18px;z-index:5}@keyframes axBFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}@keyframes axBBlink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}#axHelpCard{background:linear-gradient(160deg,rgba(43,125,255,.14),rgba(0,194,214,.06));border:1px solid rgba(43,125,255,.4);border-radius:20px;padding:16px;margin-bottom:14px;display:flex;gap:12px;align-items:center}#axHelpCard .av{width:52px;height:52px;flex:none;border-radius:50%;background:radial-gradient(circle at 32% 28%,#3b8bff,#1656c9 62%,#00c2d6);box-shadow:0 8px 20px rgba(43,125,255,.5);position:relative}#axHelpCard .av i{position:absolute;top:18px;width:7px;height:10px;border-radius:50%;background:#fff;animation:axBBlink 4s infinite}#axHelpCard .av i.l{left:15px}#axHelpCard .av i.r{right:15px}#axHelpCard b{color:#eef2f7;display:block;font-size:.85rem}#axHelpCard span{color:#8a94a3;font-size:.68rem;line-height:1.6;display:block;margin:4px 0 8px}#axHelpCard button{padding:8px 12px;border-radius:10px;border:1px solid rgba(43,125,255,.4);background:rgba(43,125,255,.12);color:#7bb5ff;font-size:.64rem;font-weight:800;cursor:pointer;margin-right:6px}';
+document.head.appendChild(st);
+var buddy=document.createElement('div');buddy.id='axBuddy';
+buddy.innerHTML='<span class="ant"><i></i></span><div class="body"></div><span class="eye l"></span><span class="eye r"></span><span class="mouth"></span>';
+document.body.appendChild(buddy);
+var bub=document.createElement('div');bub.id='axBub';
+bub.innerHTML='<div class="tx"></div><div class="btns"></div>';
+document.body.appendChild(bub);
+var tx=bub.querySelector('.tx'),btns=bub.querySelector('.btns'),typeT=null;
+function say(txt,buttons,cb){
+ bub.style.display='block';buddy.style.display='block';
+ tx.innerHTML='';btns.innerHTML='';
+ var i=0;clearInterval(typeT);
+ typeT=setInterval(function(){i++;tx.innerHTML=txt.slice(0,i);if(i>=txt.length){clearInterval(typeT);if(cb)cb();}},18);
+ (buttons||[]).forEach(function(b){
+  var el=document.createElement('button');el.className=b.k||'go';el.textContent=b.t;
+  el.onclick=function(){if(window.axSfx)window.axSfx('tap2');b.f();};
+  btns.appendChild(el);
+ });
+}
+function hide(){bub.style.display='none';buddy.style.display='none';}
+function hl(el){document.querySelectorAll('.axTourHl').forEach(function(x){x.classList.remove('axTourHl');});if(el)el.classList.add('axTourHl');}
+var STEPS=[
+ ['#greet-banner','This is your <b>live pulse</b> — real clock, your name, and Energy that grows with your real work!'],
+ ['#cube-card','The <b>Growth Cube</b> — weekly analytics built only from YOUR tasks & focus minutes.'],
+ ['.tasks-card','<b>Tasks</b> live here: tap to complete, "+ Add" to create. Everything saves automatically.'],
+ ['.focus-card','<b>Focus Timer</b> — 25 / 5 / 50 modes. Finishing a session feeds your energy & streak 🔥'],
+ ['.qa-row','<b>Quick actions</b>: new task, focus, note, AI chat, sounds, water 💧'],
+ ['#rail','Your <b>navigation rail</b>: Home, Tasks, Calendar, Notes, AI and Settings.'],
+ ['#axFab','Your <b>Smart Coach</b> capsule — real notifications & a check-in every 20 minutes.'],
+ ['#axInstall','And this green button installs AXIUM as a <b>real app</b> — offline & fullscreen!']
+];
+var si=0;
+function step(){
+ if(si>=STEPS.length){finish();return;}
+ var el=document.querySelector(STEPS[si][0]);
+ if(!el){si++;step();return;}
+ el.scrollIntoView({behavior:'smooth',block:'center'});
+ hl(el);
+ say(STEPS[si][1],[{t:'Next ➜',f:function(){si++;step();}},{t:'Skip',k:'no',f:finish}]);
+ si===0&&null;
+}
+function finish(){
+ hl(null);
+ say('That\'s everything! 💙 I live in <b>⚙️ Settings</b> — I\'ll be there to help you anytime. Taking you there now...',[{t:'OK ✨',f:flyToSettings}]);
+ setTimeout(flyToSettings,4200);
+}
+var flew=false;
+function flyToSettings(){
+ if(flew)return;flew=true;
+ localStorage.setItem('axium_tour_done','1');DONE=true;
+ bub.style.display='none';
+ var rail=null;
+ document.querySelectorAll('.rail-item').forEach(function(r){if(/set/i.test((r.querySelector('.rail-label')||{}).textContent||''))rail=r;});
+ var target=rail||document.getElementById('axFab');
+ var r=target.getBoundingClientRect();
+ buddy.style.left=(r.left+r.width/2)+'px';
+ buddy.style.bottom=(window.innerHeight-r.top+10)+'px';
+ buddy.style.transform='translateX(-50%) scale(.4)';
+ setTimeout(function(){
+  buddy.style.opacity='0';
+  if(rail)rail.click();
+  setTimeout(function(){buddy.style.opacity='';buddy.style.transform='';buddy.style.display='none';ensureHelpCard();},700);
+ },950);
+}
+function ensureHelpCard(){
+ var pg=document.getElementById('axSetPage');
+ if(!pg){setTimeout(ensureHelpCard,800);return;}
+ if(pg.querySelector('#axHelpCard'))return;
+ var c=document.createElement('div');c.id='axHelpCard';
+ c.innerHTML='<div class="av"><i class="l"></i><i class="r"></i></div><div style="flex:1"><b>🤖 AXIUM Helper</b><span>Hi! I\'m AXIUM — your personal guide. Ask me anything or replay the tour.</span><button id="axHelpReplay" type="button">🎬 Replay tour</button><button id="axHelpTips" type="button">💡 Tips</button></div>';
+ pg.insertBefore(c,pg.firstChild);
+ c.querySelector('#axHelpReplay').onclick=function(){si=0;flew=false;pg.classList.remove('open');setTimeout(function(){say('Welcome back! Let\'s walk through AXIUM again ✨',[{t:'Let\'s go',f:function(){waitDash(step);}}]);},300);};
+ c.querySelector('#axHelpTips').onclick=function(){
+  say('💡 <b>Tips:</b> Finish focus sessions to grow Energy · Open AXIUM daily to keep your Streak 🔥 · Use Quick chips for speed · Install the app for offline mode!',[{t:'Got it',f:hide}]);
+  buddy.style.display='block';
+ };
+}
+function waitDash(cb){
+ var d=document.getElementById('dashboard');
+ if(d&&d.classList.contains('active')){cb();return;}
+ var iv=setInterval(function(){if(d&&d.classList.contains('active')){clearInterval(iv);setTimeout(cb,600);}},500);
+}
+if(!DONE){
+ setTimeout(function(){
+  say('Hi! I\'m <b>AXIUM</b> — your personal intelligence 🤖 I can show you everything around. Want a quick tour?',[
+   {t:'Let\'s go ✨',f:function(){si=0;waitDash(step);}},
+   {t:'Later',k:'no',f:function(){localStorage.setItem('axium_tour_done','1');hide();}}
+  ]);
+ },1600);
+}else{
+ ensureHelpCard();
+}
+})();
