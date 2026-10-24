@@ -874,3 +874,39 @@ function loop(){
 }
 loop();setInterval(loop,1500);
 })();
+/* ===== AXIUM v38: FULL ANIME CEL-SHADE REDRAW ===== */
+(function(){
+if(window.__ax38)return;window.__ax38=true;
+var BASE='#273142',SHAD='#10161e',HIGH='#3e5070',LINE='#05080d';
+var ARM_IN='<path d="M52 56 C38 52 24 48 14 42 L10 50 C20 58 36 64 50 66 Z" fill="'+BASE+'" stroke="'+LINE+'" stroke-width="2.5"/><path d="M14 42 L2 36 L0 42 L10 50 Z" fill="'+BASE+'" stroke="'+LINE+'" stroke-width="2.5"/><path d="M50 62 C36 60 22 54 12 48 L10 50 C20 58 36 64 50 66 Z" fill="'+SHAD+'"/><path d="M52 56 C38 52 24 48 14 42" stroke="#00c2d6" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+var BODY='<defs><linearGradient id="axAu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(43,125,255,.28)"/><stop offset="1" stop-color="rgba(0,194,214,0)"/></linearGradient></defs><ellipse cx="80" cy="120" rx="52" ry="86" fill="url(#axAu)" opacity=".5"/><g stroke="'+LINE+'" stroke-width="2.5" fill="'+BASE+'"><path d="M64 40 C64 24 96 24 96 40 L96 52 C96 62 88 68 80 68 C72 68 64 62 64 52 Z"/><path d="M72 66 L88 66 L90 76 L70 76 Z"/><path d="M48 56 C60 46 100 46 112 56 L106 86 C104 104 94 116 80 122 C66 116 56 104 54 86 Z"/><path d="M112 58 C124 66 128 82 124 94 C120 102 112 104 108 98 L104 86 C108 78 108 66 104 60 Z"/><path d="M64 118 C58 146 58 180 62 210 L74 210 C70 180 72 150 78 122 Z"/><path d="M96 118 C102 146 102 180 98 210 L86 210 C90 180 88 150 82 122 Z"/></g><g fill="'+SHAD+'"><path d="M80 26 C92 26 96 34 96 40 L96 52 C96 60 90 66 80 68 Z"/><path d="M80 48 C96 48 108 54 112 56 L106 86 C104 104 94 116 80 122 Z"/><path d="M108 62 C118 70 122 82 119 92 L114 96 L110 86 C113 78 112 68 108 62 Z"/><path d="M88 122 C94 148 94 180 91 208 L98 210 C102 180 102 146 96 118 Z"/></g><g fill="'+HIGH+'" opacity=".85"><path d="M54 60 C58 52 66 48 74 47 L70 60 C66 74 66 92 70 106 L64 100 C58 90 54 74 54 60 Z"/><path d="M66 32 C68 27 74 25 78 25 L76 30 C72 31 68 33 66 36 Z"/></g><g stroke="#0d1319" stroke-width="1.6" fill="none" stroke-linecap="round"><path d="M80 62 V112"/><path d="M68 74 H92"/><path d="M70 86 H90"/><path d="M72 98 H88"/><path d="M60 62 C70 70 76 70 80 66"/><path d="M100 62 C90 70 84 70 80 66"/></g><circle cx="80" cy="80" r="10" fill="rgba(0,194,214,.22)"/><circle class="coreS" cx="80" cy="80" r="5.5" fill="#9ff3ff"/><g stroke="#7bb5ff" stroke-width="3" fill="none" opacity=".8" stroke-linecap="round" style="filter:drop-shadow(0 0 6px rgba(123,181,255,.8))"><path d="M64 40 C64 26 72 24 78 24"/><path d="M48 56 C56 50 64 48 70 47"/><path d="M54 86 C56 100 62 112 72 118"/></g><g id="axArmSlot"></g>';
+var ANIM='<svg viewBox="0 0 160 220">'+BODY+'</svg>';
+var ANIM_FULL='<svg viewBox="0 0 160 220">'+BODY.replace('<g id="axArmSlot"></g>','<g id="axArmP" style="transform-box:view-box;transform-origin:52px 60px"><g>'+ARM_IN+'</g></g>')+'</svg>';
+var st=document.createElement('style');
+st.textContent='#axBuddy .coreS{animation:axHCore 1.8s ease-in-out infinite;transform-origin:center;transform-box:fill-box}';
+document.head.appendChild(st);
+function applyBuddy(){
+ var fig=document.querySelector('#axBuddy .fig');
+ if(!fig)return;
+ var svg=fig.querySelector('svg');
+ if(!svg||svg.dataset.a38)return;
+ svg.dataset.a38='1';
+ var oldArm=svg.querySelector('#axArmP');
+ fig.innerHTML=ANIM;
+ var ns=fig.querySelector('svg');ns.dataset.a38='1';
+ if(oldArm){
+  var inner=oldArm.querySelector('g');
+  if(inner)inner.innerHTML=ARM_IN;
+  var slot=ns.querySelector('#axArmSlot');
+  if(slot){slot.parentNode.insertBefore(oldArm,slot);slot.remove();}
+  else ns.appendChild(oldArm);
+ }
+}
+function applyCard(){
+ document.querySelectorAll('#axHelpCard .av').forEach(function(av){
+  if(av.dataset.a38)return;av.dataset.a38='1';av.innerHTML=ANIM_FULL;
+ });
+}
+function loop(){applyBuddy();applyCard();}
+loop();setInterval(loop,1200);
+})();
