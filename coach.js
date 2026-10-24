@@ -841,3 +841,12 @@ if(!DONE){
  ensureHelpCard();
 }
 })();
+/* ===== AXIUM v33f: GUARDIAN SIZE FIX ===== */
+(function(){
+if(window.__ax33f)return;window.__ax33f=true;
+var st=document.createElement('style');
+st.textContent='#axBuddy .fig svg{width:100%;height:100%}#axBuddy .body,#axBuddy .eye,#axBuddy .mouth,#axBuddy .ant{display:none!important}';
+document.head.appendChild(st);
+var bs=document.querySelectorAll('#axBuddy');
+for(var i=0;i<bs.length-1;i++){bs[i].parentNode.removeChild(bs[i]);}
+})();
