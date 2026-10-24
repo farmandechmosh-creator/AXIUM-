@@ -841,12 +841,136 @@ if(!DONE){
  ensureHelpCard();
 }
 })();
-/* ===== AXIUM v33f: GUARDIAN SIZE FIX ===== */
+/* ===== AXIUM v35: MUSCULAR SIDE GUIDE + SPOTLIGHT TOUR ===== */
 (function(){
-if(window.__ax33f)return;window.__ax33f=true;
+if(window.__ax35)return;window.__ax35=true;
+var DONE=localStorage.getItem('axium_tour_done')==='1';
+var FIG='<svg viewBox="0 0 140 200"><defs><linearGradient id="axHG2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fc1ff"/><stop offset=".45" stop-color="#2b7dff"/><stop offset="1" stop-color="#00c2d6"/></linearGradient></defs><g fill="url(#axHG2)"><circle cx="70" cy="18" r="11"/><path d="M62 27 L78 27 L86 40 L54 40 Z"/><circle cx="38" cy="47" r="12"/><circle cx="102" cy="47" r="12"/><path d="M30 42 C45 35 95 35 110 42 L104 62 C102 80 92 93 70 99 C48 93 38 80 36 62 Z"/><path d="M30 50 C17 58 13 76 19 92 C23 100 32 102 36 96 L40 78 C36 68 36 58 40 52 Z"/><path d="M52 97 C46 126 46 158 50 188 L63 188 C59 158 61 128 67 101 Z"/><path d="M88 97 C94 126 94 158 90 188 L77 188 C81 158 79 128 73 101 Z"/></g><g id="axArmP" style="transform-box:view-box;transform-origin:102px 50px;transition:transform .55s cubic-bezier(.34,1.56,.64,1)"><g fill="url(#axHG2)"><path d="M100 42 C112 44 122 48 130 50 L130 58 C120 58 108 56 99 55 Z"/><circle cx="132" cy="54" r="6"/></g></g><g stroke="rgba(255,255,255,.3)" stroke-width="1.5" fill="none"><path d="M70 58 V94"/><path d="M58 66 H82"/><path d="M60 76 H80"/><path d="M62 86 H78"/><path d="M46 52 C56 58 64 58 69 54"/><path d="M94 52 C84 58 76 58 71 54"/><path d="M48 76 L56 71"/><path d="M92 76 L84 71"/></g></svg>';
 var st=document.createElement('style');
-st.textContent='#axBuddy .fig svg{width:100%;height:100%}#axBuddy .body,#axBuddy .eye,#axBuddy .mouth,#axBuddy .ant{display:none!important}';
+st.textContent='#axBuddy{position:fixed;left:8px;bottom:118px;z-index:100010;width:104px;height:164px;display:none;pointer-events:none;transition:transform .4s}#axBuddy.flip{transform:scaleX(-1)}#axBuddy .halo{position:absolute;inset:-24px;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 62%,rgba(43,125,255,.5) 84%,rgba(0,194,214,.8) 94%,transparent 100%);filter:blur(7px);animation:axHHalo 4s linear infinite}#axBuddy .ring{position:absolute;left:50%;bottom:-8px;width:90px;height:20px;margin-left:-45px;border-radius:50%;border:2px solid rgba(0,194,214,.55);opacity:0}#axBuddy .fig{position:absolute;inset:0;filter:drop-shadow(0 0 18px rgba(43,125,255,.65)) drop-shadow(0 6px 24px rgba(0,194,214,.35));transform-origin:50% 100%}#axBuddy .fig svg{width:100%;height:100%}#axBuddy .core{position:absolute;left:50%;top:58px;width:13px;height:13px;margin-left:-6px;border-radius:50%;background:radial-gradient(circle,#fff,#00c2d6 60%,transparent);box-shadow:0 0 18px #00c2d6;animation:axHCore 1.8s ease-in-out infinite}#axBuddy .parts i{position:absolute;left:50%;top:50%;width:5px;height:5px;border-radius:50%;background:#9cc8ff;box-shadow:0 0 10px #9cc8ff;opacity:0}#axBuddy.mat .fig{animation:axHMat .9s cubic-bezier(.34,1.56,.64,1) both,axHBreath 3.2s 1s ease-in-out infinite}#axBuddy.mat .ring.r1{animation:axHRing 1s .1s ease-out both}#axBuddy.mat .ring.r2{animation:axHRing 1s .35s ease-out both}#axBuddy.mat .parts i{animation:axHPart .8s cubic-bezier(.2,.8,.3,1) both}#axBuddy.hop .fig{animation:axHHop .5s cubic-bezier(.34,1.56,.64,1)}#axBuddy.flex .fig{animation:axHFlex 1.1s cubic-bezier(.34,1.56,.64,1)}#axBuddy.idle .fig{animation:axHBreath 3.2s ease-in-out infinite,axHFloat 4s ease-in-out infinite}#axBub{position:fixed;left:118px;right:12px;bottom:118px;z-index:100009;background:rgba(13,20,34,.97);border:1px solid rgba(43,125,255,.5);border-radius:20px;padding:14px 16px;display:none;box-shadow:0 20px 50px rgba(0,0,0,.6),0 0 30px rgba(43,125,255,.2);animation:axBubIn2 .5s cubic-bezier(.34,1.56,.64,1) both}#axBub .bh{display:flex;align-items:center;gap:8px;margin-bottom:6px}#axBub .bh span{padding:3px 9px;border-radius:999px;background:rgba(43,125,255,.18);border:1px solid rgba(43,125,255,.45);color:#7bb5ff;font-size:.58rem;font-weight:900}#axBub .bh b{color:#eef2f7;font-size:.8rem;font-weight:900;letter-spacing:.5px}#axBub .tx{color:#cfd8e4;font-size:.78rem;line-height:1.7;min-height:42px}#axBub .tx b{color:#7bb5ff}#axBub .dots{display:flex;gap:4px;margin-top:9px}#axBub .dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.15)}#axBub .dots i.on{background:#2b7dff;box-shadow:0 0 8px #2b7dff}#axBub .btns{display:flex;gap:8px;margin-top:10px}#axBub .btns button{flex:1;padding:10px;border-radius:12px;border:none;font-weight:800;font-size:.72rem;cursor:pointer}#axBub .go{background:linear-gradient(135deg,#2b7dff,#1a6ae0);color:#fff}#axBub .no{background:rgba(255,255,255,.07);color:#8a94a3}#axSpot{position:fixed;z-index:100008;border-radius:20px;box-shadow:0 0 0 9999px rgba(4,6,10,.74),0 0 0 2px rgba(43,125,255,.9),0 0 44px rgba(43,125,255,.5);pointer-events:none;display:none;transition:all .5s cubic-bezier(.34,1.56,.64,1)}#axHelpCard{background:linear-gradient(160deg,rgba(43,125,255,.14),rgba(0,194,214,.06));border:1px solid rgba(43,125,255,.4);border-radius:20px;padding:16px;margin-bottom:14px;display:flex;gap:12px;align-items:center}#axHelpCard .av{width:62px;height:88px;flex:none;filter:drop-shadow(0 6px 16px rgba(43,125,255,.5))}#axHelpCard .av svg{width:100%;height:100%}#axHelpCard b{color:#eef2f7;display:block;font-size:.85rem}#axHelpCard span{color:#8a94a3;font-size:.68rem;line-height:1.6;display:block;margin:4px 0 8px}#axHelpCard button{padding:8px 12px;border-radius:10px;border:1px solid rgba(43,125,255,.4);background:rgba(43,125,255,.12);color:#7bb5ff;font-size:.64rem;font-weight:800;cursor:pointer;margin-right:6px}@keyframes axHHalo{to{transform:rotate(360deg)}}@keyframes axHBreath{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.03)}}@keyframes axHFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}@keyframes axHCore{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.5);opacity:.5}}@keyframes axHMat{0%{opacity:0;transform:scale(.25) translateY(40px);filter:blur(14px)}60%{opacity:1;filter:blur(0)}80%{transform:scale(1.08) translateY(-6px)}100%{transform:scale(1)}}@keyframes axHRing{0%{transform:scale(.4);opacity:.9}100%{transform:scale(2.4);opacity:0}}@keyframes axHPart{0%{transform:translate(var(--px),var(--py)) scale(1.6);opacity:0}40%{opacity:1}100%{transform:translate(0,0) scale(.4);opacity:0}}@keyframes axHHop{0%{transform:scaleY(1)}30%{transform:scaleY(.84) scaleX(1.12)}60%{transform:scaleY(1.12) scaleX(.95) translateY(-12px)}100%{transform:scaleY(1)}}@keyframes axHFlex{0%{transform:scale(1)}35%{transform:scale(1.14)}55%{transform:scale(1.05)}75%{transform:scale(1.12)}100%{transform:scale(1)}}@keyframes axBubIn2{from{opacity:0;transform:translateY(24px) scale(.9)}to{opacity:1;transform:none}}@keyframes axPartFly{to{transform:translate(var(--dx),var(--dy));opacity:0}}@keyframes axGhost{to{opacity:0;transform:scale(.8)}}.axGhost{position:fixed;z-index:100005;width:104px;height:164px;pointer-events:none;opacity:.35;filter:blur(2px);animation:axGhost .6s ease-out forwards}';
 document.head.appendChild(st);
-var bs=document.querySelectorAll('#axBuddy');
-for(var i=0;i<bs.length-1;i++){bs[i].parentNode.removeChild(bs[i]);}
+var buddy=document.createElement('div');buddy.id='axBuddy';
+var partsHtml='';for(var pi=0;pi<12;pi++){var ang=pi/12*Math.PI*2,dist=90+Math.random()*60;partsHtml+='<i style="--px:'+(Math.cos(ang)*dist)+'px;--py:'+(Math.sin(ang)*dist)+'px;animation-delay:'+(0.1+pi*0.03)+'s"></i>';}
+buddy.innerHTML='<span class="halo"></span><span class="ring r1"></span><span class="ring r2"></span><span class="parts">'+partsHtml+'</span><div class="fig">'+FIG+'</div><span class="core"></span>';
+document.body.appendChild(buddy);
+var arm=buddy.querySelector('#axArmP');
+var bub=document.createElement('div');bub.id='axBub';
+bub.innerHTML='<div class="bh"><span id="axBubStep">1/8</span><b id="axBubTitle"></b></div><div class="tx"></div><div class="dots"></div><div class="btns"></div>';
+document.body.appendChild(bub);
+var spot=document.createElement('div');spot.id='axSpot';document.body.appendChild(spot);
+var tx=bub.querySelector('.tx'),btns=bub.querySelector('.btns'),dots=bub.querySelector('.dots'),stepEl=bub.querySelector('#axBubStep'),titleEl=bub.querySelector('#axBubTitle'),typeT=null,shown=false;
+function showBuddy(){
+ if(shown){buddy.style.display='block';return;}
+ shown=true;buddy.classList.add('mat');buddy.style.display='block';
+ if(window.axSfx)window.axSfx('gong');
+ setTimeout(function(){buddy.classList.remove('mat');buddy.classList.add('idle');},1400);
+}
+function hop(){buddy.classList.remove('idle');buddy.classList.add('hop');burst();setTimeout(function(){buddy.classList.remove('hop');buddy.classList.add('idle');},520);}
+function burst(){
+ var br=buddy.getBoundingClientRect();
+ for(var i=0;i<10;i++){var s=document.createElement('i');var a=Math.random()*Math.PI*2,d=40+Math.random()*50;
+  s.style.cssText='position:fixed;z-index:100011;left:'+(br.left+br.width/2)+'px;top:'+(br.top+br.height/2)+'px;width:6px;height:6px;border-radius:50%;background:#9cc8ff;box-shadow:0 0 12px #9cc8ff;pointer-events:none;--dx:'+(Math.cos(a)*d)+'px;--dy:'+(Math.sin(a)*d-30)+'px;animation:axPartFly .7s ease-out forwards';
+  document.body.appendChild(s);setTimeout(function(el){return function(){el.remove();};}(s),800);}
+}
+function pointAt(el){
+ var br=buddy.getBoundingClientRect(),rr=el.getBoundingClientRect();
+ var sx=br.left+br.width*0.72,sy=br.top+br.height*0.28;
+ var cx=rr.left+rr.width/2,cy=rr.top+rr.height/2;
+ var flip=cx<br.left+br.width/2;
+ buddy.classList.toggle('flip',flip);
+ var dx=flip?-(cx-sx):(cx-sx),dy=cy-sy;
+ var a=Math.atan2(dy,dx)*180/Math.PI;
+ if(a>75)a=75;if(a<-75)a=-75;
+ if(arm)arm.style.transform='rotate('+a+'deg)';
+}
+function spotTo(el){
+ var r=el.getBoundingClientRect(),p=8;
+ spot.style.display='block';
+ spot.style.left=(r.left-p)+'px';spot.style.top=(r.top-p)+'px';
+ spot.style.width=(r.width+p*2)+'px';spot.style.height=(r.height+p*2)+'px';
+}
+function say(txt,title,buttons){
+ showBuddy();bub.style.display='block';
+ if(title)titleEl.textContent=title;
+ tx.innerHTML='';btns.innerHTML='';
+ var i=0;clearInterval(typeT);
+ typeT=setInterval(function(){i++;tx.innerHTML=txt.slice(0,i);if(i>=txt.length)clearInterval(typeT);},16);
+ (buttons||[]).forEach(function(b){var el=document.createElement('button');el.className=b.k||'go';el.textContent=b.t;el.onclick=function(){if(window.axSfx)window.axSfx('tap2');b.f();};btns.appendChild(el);});
+}
+function setDots(n){dots.innerHTML='';for(var i=0;i<STEPS.length;i++){var d=document.createElement('i');if(i<=n)d.className='on';dots.appendChild(d);}}
+function hide(){bub.style.display='none';buddy.style.display='none';spot.style.display='none';}
+var STEPS=[
+ {s:'#greet-banner',t:'Live Pulse',x:'This is your <b>live pulse</b> — real clock, your name, and Energy that grows only with YOUR real work!'},
+ {s:'#cube-card',t:'Growth Cube',x:'The <b>Growth Cube</b> — weekly analytics built from your tasks & focus minutes. Nothing fake here.'},
+ {s:'.tasks-card',t:'Tasks',x:'<b>Tasks</b> live here: tap a row to complete it, "+ Add" to create. Everything saves automatically.'},
+ {s:'.focus-card',t:'Focus Timer',x:'<b>Focus Timer</b> — 25 / 5 / 50 modes. Finishing a session feeds your energy & streak 🔥'},
+ {s:'.qa-row',t:'Quick Actions',x:'<b>Quick actions</b>: new task, focus, note, AI chat, sounds and water — one tap each.'},
+ {s:'#rail',t:'Navigation',x:'Your <b>navigation rail</b>: Home, Tasks, Calendar, Notes, AI and Settings.'},
+ {s:'#axFab',t:'Smart Coach',x:'Your <b>Smart Coach</b> capsule — real notifications & a check-in every 20 minutes.'},
+ {s:'#axInstall',t:'Install App',x:'And this green button installs AXIUM as a <b>real app</b> — offline & fullscreen!'}
+];
+var si=0;
+function step(){
+ if(si>=STEPS.length){finish();return;}
+ var el=document.querySelector(STEPS[si].s);
+ if(!el){si++;step();return;}
+ el.scrollIntoView({behavior:'smooth',block:'center'});
+ setTimeout(function(){spotTo(el);pointAt(el);},380);
+ hop();
+ stepEl.textContent=(si+1)+'/'+STEPS.length;
+ setDots(si);
+ say(STEPS[si].x,STEPS[si].t,[{t:'Next ➜',f:function(){si++;step();}},{t:'Skip',k:'no',f:finish}]);
+}
+function finish(){
+ spot.style.display='none';
+ buddy.classList.remove('idle');buddy.classList.add('flex');burst();burst();
+ setTimeout(function(){buddy.classList.remove('flex');buddy.classList.add('idle');},1200);
+ say('That\'s everything! 💙 I live in <b>⚙️ Settings</b> — I\'ll be there to help you anytime. Taking you there now...','Guardian',[{t:'OK ✨',f:flyToSettings}]);
+ setTimeout(flyToSettings,4200);
+}
+var flew=false;
+function flyToSettings(){
+ if(flew)return;flew=true;
+ localStorage.setItem('axium_tour_done','1');DONE=true;
+ bub.style.display='none';spot.style.display='none';
+ var rail=null;
+ document.querySelectorAll('.rail-item').forEach(function(r){if(/set/i.test((r.querySelector('.rail-label')||{}).textContent||''))rail=r;});
+ var target=rail||document.getElementById('axFab');
+ var r=target.getBoundingClientRect();
+ for(var g=1;g<=3;g++){(function(g){setTimeout(function(){var gh=buddy.cloneNode(true);gh.className='axGhost';gh.style.left=buddy.style.left||'8px';gh.style.bottom=buddy.style.bottom||'118px';document.body.appendChild(gh);setTimeout(function(){gh.remove();},700);},g*90);})(g);}
+ buddy.style.transition='left .8s cubic-bezier(.5,0,.2,1),bottom .8s cubic-bezier(.5,0,.2,1),opacity .5s .5s';
+ buddy.style.left=(r.left+r.width/2-52)+'px';
+ buddy.style.bottom=(window.innerHeight-r.top+10)+'px';
+ buddy.style.opacity='0';
+ setTimeout(function(){
+  if(rail)rail.click();
+  setTimeout(function(){
+   buddy.style.transition='';buddy.style.opacity='';buddy.style.left='';buddy.style.bottom='';buddy.style.display='none';shown=false;
+   ensureHelpCard();
+  },700);
+ },900);
+}
+function ensureHelpCard(){
+ var pg=document.getElementById('axSetPage');
+ if(!pg){setTimeout(ensureHelpCard,800);return;}
+ if(pg.querySelector('#axHelpCard'))return;
+ var c=document.createElement('div');c.id='axHelpCard';
+ c.innerHTML='<div class="av">'+FIG+'</div><div style="flex:1"><b>🛡️ AXIUM Guardian</b><span>Your faceless muscular guide. Replay the tour or ask for tips anytime.</span><button id="axHelpReplay" type="button">🎬 Replay tour</button><button id="axHelpTips" type="button">💡 Tips</button></div>';
+ pg.insertBefore(c,pg.firstChild);
+ c.querySelector('#axHelpReplay').onclick=function(){si=0;flew=false;shown=false;pg.classList.remove('open');setTimeout(function(){say('Welcome back! Let\'s walk through AXIUM again ✨','Guardian',[{t:'Let\'s go',f:function(){waitDash(step);}}]);},300);};
+ c.querySelector('#axHelpTips').onclick=function(){say('💡 <b>Tips:</b> Finish focus sessions to grow Energy · Open AXIUM daily to keep your Streak 🔥 · Use Quick chips for speed · Install the app for offline mode!','Guardian',[{t:'Got it',f:hide}]);};
+}
+function waitDash(cb){
+ var d=document.getElementById('dashboard');
+ if(d&&d.classList.contains('active')){cb();return;}
+ var iv=setInterval(function(){if(d&&d.classList.contains('active')){clearInterval(iv);setTimeout(cb,600);}},500);
+}
+if(!DONE){
+ setTimeout(function(){
+  say('Hi! I\'m <b>AXIUM</b> — your guardian 💪 A faceless strength built from your own data. Want me to show you everything?','Guardian',[
+   {t:'Let\'s go ✨',f:function(){si=0;waitDash(step);}},
+   {t:'Later',k:'no',f:function(){localStorage.setItem('axium_tour_done','1');hide();}}
+  ]);
+ },1600);
+}else{ensureHelpCard();}
 })();
