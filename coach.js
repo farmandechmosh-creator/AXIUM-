@@ -910,3 +910,49 @@ function applyCard(){
 function loop(){applyBuddy();applyCard();}
 loop();setInterval(loop,1200);
 })();
+/* ===== AXIUM v39: LIVING LINE-ART SKETCH ===== */
+(function(){
+if(window.__ax39)return;window.__ax39=true;
+var BODY='<defs><linearGradient id="axLG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fc1ff"/><stop offset=".5" stop-color="#4a95ff"/><stop offset="1" stop-color="#00c2d6"/></linearGradient></defs><g class="ln"><path d="M120 28 C104 28 96 42 96 56 C96 72 106 84 120 84 C134 84 144 72 144 56 C144 42 136 28 120 28 Z"/><path d="M112 84 L110 98"/><path d="M128 84 L130 98"/><path d="M130 98 C152 102 162 116 164 136 L164 212"/><path d="M110 98 C100 100 92 106 88 116"/><path d="M88 116 C84 140 86 176 92 212"/></g><g id="axArmSlot"></g>';
+var ARMIN='<path d="M88 116 C72 114 62 106 56 96 C52 88 50 82 50 76"/><path d="M50 76 C44 74 38 72 32 72"/><path d="M50 72 C46 64 44 58 44 50"/><path d="M54 70 C52 62 52 54 54 46"/><path d="M58 70 C58 62 60 54 64 48"/><path d="M50 76 C52 72 56 70 60 70"/>';
+var ANIM='<svg viewBox="0 0 200 220">'+BODY+'</svg>';
+var ANIM_FULL='<svg viewBox="0 0 200 220">'+BODY.replace('<g id="axArmSlot"></g>','<g style="transform-box:view-box;transform-origin:88px 116px"><g>'+ARMIN+'</g></g>')+'</svg>';
+var st=document.createElement('style');
+st.textContent='#axBuddy{width:calc(38vh * .9)}#axBuddy .fig path,#axHelpCard .av path{fill:none;stroke:url(#axLG);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 7px rgba(123,181,255,.7))}';
+document.head.appendChild(st);
+function drawIn(svg){
+ var ps=svg.querySelectorAll('path');
+ ps.forEach(function(p,i){
+  try{
+   var L=p.getTotalLength();
+   p.style.strokeDasharray=L;
+   p.style.strokeDashoffset=L;
+   p.style.transition='stroke-dashoffset .7s '+(i*0.12)+'s cubic-bezier(.4,0,.2,1)';
+   requestAnimationFrame(function(){requestAnimationFrame(function(){p.style.strokeDashoffset='0';});});
+  }catch(e){}
+ });
+}
+function mark(el){el.dataset.a38='1';el.dataset.g37='1';el.dataset.a39='1';}
+function applyBuddy(){
+ var fig=document.querySelector('#axBuddy .fig');if(!fig)return;
+ var svg=fig.querySelector('svg');if(!svg||svg.dataset.a39)return;
+ var oldArm=svg.querySelector('#axArmP');
+ fig.innerHTML=ANIM;
+ var ns=fig.querySelector('svg');mark(ns);
+ if(oldArm){
+  oldArm.style.transformOrigin='88px 116px';
+  var inner=oldArm.querySelector('g');if(inner)inner.innerHTML=ARMIN;
+  var slot=ns.querySelector('#axArmSlot');
+  if(slot){slot.parentNode.insertBefore(oldArm,slot);slot.remove();}else ns.appendChild(oldArm);
+ }
+ drawIn(ns);
+}
+function applyCard(){
+ document.querySelectorAll('#axHelpCard .av').forEach(function(av){
+  if(av.dataset.a39)return;mark(av);av.innerHTML=ANIM_FULL;
+  var s=av.querySelector('svg');if(s)mark(s);
+ });
+}
+function loop(){applyBuddy();applyCard();}
+loop();setInterval(loop,1200);
+})();
