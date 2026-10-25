@@ -1136,3 +1136,72 @@ function setImg(){
 }
 setImg();setInterval(setImg,1500);
 })();
+/* ===== AXIUM v43: HANDSOME NEON ROBOT NARRATOR ===== */
+(function(){
+if(window.__ax43)return;window.__ax43=true;
+var D='url(#axRB)',A='url(#axRA)';
+function f(d,c){return '<path d="'+d+'" fill="'+c+'"/>';}
+function s(d,c,w){return '<path d="'+d+'" fill="none" stroke="'+c+'" stroke-width="'+(w||2)+'" stroke-linecap="round"/>';}
+var DEFS='<defs><linearGradient id="axRB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a3444"/><stop offset="1" stop-color="#0d131c"/></linearGradient><linearGradient id="axRA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2b7dff"/><stop offset="1" stop-color="#00c2d6"/></linearGradient></defs>';
+var BODY=DEFS+'<g>'+
+ s('M100 14 V6','#7bb5ff',2.5)+
+ '<circle cx="100" cy="5" r="3.5" fill="#00c2d6" class="glowC"/>'+
+ '<rect x="76" y="14" width="48" height="34" rx="12" fill="'+D+'"/>'+
+ '<rect x="72" y="26" width="6" height="12" rx="3" fill="'+A+'"/>'+
+ '<rect x="122" y="26" width="6" height="12" rx="3" fill="'+A+'"/>'+
+ '<rect x="82" y="24" width="36" height="14" rx="7" fill="#06202a"/>'+
+ '<rect x="84" y="26" width="32" height="10" rx="5" fill="'+A+'" opacity=".85" class="glowC"/>'+
+ '<circle cx="92" cy="31" r="2.6" fill="#eaffff"/><circle cx="108" cy="31" r="2.6" fill="#eaffff"/>'+
+ '<rect x="92" y="48" width="16" height="8" rx="3" fill="#141b26"/>'+
+ '<circle cx="64" cy="64" r="14" fill="'+D+'"/><circle cx="136" cy="64" r="14" fill="'+D+'"/>'+
+ s('M52 60 C56 52 72 52 76 60','#00c2d6',2)+s('M124 60 C128 52 144 52 148 60','#00c2d6',2)+
+ f('M70 58 C84 52 116 52 130 58 L126 92 C124 104 112 112 100 114 C88 112 76 104 74 92 Z',D)+
+ f('M84 62 C92 58 108 58 116 62 L114 78 C108 84 92 84 86 78 Z',A)+
+ '<circle cx="100" cy="76" r="9" fill="#06202a"/><circle cx="100" cy="76" r="6" fill="'+A+'" class="glowC"/><circle cx="100" cy="76" r="2.4" fill="#eaffff"/>'+
+ '<rect x="88" y="96" width="24" height="18" rx="6" fill="#141b26"/>'+
+ s('M92 102 H108','#0d1319',1.6)+s('M92 108 H108','#0d1319',1.6)+
+ '<rect x="84" y="114" width="32" height="12" rx="6" fill="'+D+'"/>'+
+ f('M88 126 C84 150 84 180 88 208 L98 208 C96 180 96 152 100 128 Z',D)+
+ f('M112 126 C116 150 116 180 112 208 L102 208 C104 180 104 152 100 128 Z',D)+
+ '<rect x="80" y="208" width="22" height="10" rx="5" fill="'+A+'"/><rect x="98" y="208" width="22" height="10" rx="5" fill="'+A+'"/>'+
+ f('M136 66 C150 74 154 90 148 102 C144 110 134 112 130 106 L126 96 C132 90 132 78 128 70 Z',D)+
+ s('M88 132 V200','#00c2d6',1.6)+s('M112 132 V200','#00c2d6',1.6)+
+ s('M74 92 C76 104 88 112 100 114','#7bb5ff',2)+
+ '</g><g id="axArmSlot"></g>';
+var ARMIN=
+ f('M64 62 C50 66 40 74 36 84 C34 92 38 98 44 98 L52 94 C50 86 54 76 62 70 Z',D)+
+ f('M40 94 C34 84 32 74 34 66 L44 64 C44 74 48 84 52 90 Z',D)+
+ f('M30 62 C28 54 32 48 38 48 C44 48 48 54 46 62 Z',D)+
+ f('M32 48 L28 36 L32 34 L36 46 Z',D)+
+ f('M38 46 L36 32 L40 32 L42 46 Z',D)+
+ f('M44 48 L46 34 L50 36 L48 50 Z',D)+
+ f('M28 58 L18 54 L20 50 L30 54 Z',D)+
+ s('M30 62 C28 54 32 48 38 48','#00c2d6',2);
+var ANIM='<svg viewBox="0 0 200 240">'+BODY+'</svg>';
+var ANIM_FULL='<svg viewBox="0 0 200 240">'+BODY.replace('<g id="axArmSlot"></g>','<g style="transform-box:view-box;transform-origin:64px 66px"><g>'+ARMIN+'</g></g>')+'</svg>';
+var st=document.createElement('style');
+st.textContent='#axBuddy{width:calc(46vh * .83);height:46vh}#axBuddy .glowC,#axHelpCard .glowC{filter:drop-shadow(0 0 8px rgba(0,194,214,.95))}#axHelpCard .av svg{width:100%;height:100%}';
+document.head.appendChild(st);
+function mark(el){el.dataset.a38='1';el.dataset.g37='1';el.dataset.a39='1';el.dataset.a40='1';el.dataset.a41='1';el.dataset.a42='1';el.dataset.a43='1';}
+function applyBuddy(){
+ var fig=document.querySelector('#axBuddy .fig');if(!fig)return;
+ var svg=fig.querySelector('svg');if(!svg||svg.dataset.a43)return;
+ var oldArm=svg.querySelector('#axArmP');
+ fig.innerHTML=ANIM;
+ var ns=fig.querySelector('svg');mark(ns);
+ if(oldArm){
+  oldArm.style.transformOrigin='64px 66px';
+  var inner=oldArm.querySelector('g');if(inner)inner.innerHTML=ARMIN;
+  var slot=ns.querySelector('#axArmSlot');
+  if(slot){slot.parentNode.insertBefore(oldArm,slot);slot.remove();}else ns.appendChild(oldArm);
+ }
+}
+function applyCard(){
+ document.querySelectorAll('#axHelpCard .av').forEach(function(av){
+  if(av.dataset.a43)return;mark(av);av.innerHTML=ANIM_FULL;
+  var s2=av.querySelector('svg');if(s2)mark(s2);
+ });
+}
+function loop(){applyBuddy();applyCard();}
+loop();setInterval(loop,1200);
+})();
