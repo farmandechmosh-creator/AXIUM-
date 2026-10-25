@@ -956,3 +956,67 @@ function applyCard(){
 function loop(){applyBuddy();applyCard();}
 loop();setInterval(loop,1200);
 })();
+/* ===== AXIUM v40: MUSCULAR 3/4 ANIME GUARDIAN ===== */
+(function(){
+if(window.__ax40)return;window.__ax40=true;
+var B='#273142',S='#10161e',H='#3e5070',D='#1a222e',L='#0d1319';
+function f(d,c){return '<path d="'+d+'" style="fill:'+c+'"/>';}
+function s(d,c,w){return '<path d="'+d+'" style="fill:none;stroke:'+c+';stroke-width:'+(w||2.5)+';stroke-linecap:round"/>';}
+var BODY='<g>'+
+ f('M146 100 C158 108 162 122 158 134 C154 142 146 144 142 138 L138 126 C142 118 142 108 138 102 Z',S)+
+ f('M128 164 C136 190 136 214 132 236 L116 236 C120 214 118 190 112 168 Z',D)+
+ f('M96 164 C88 190 88 214 92 236 L108 236 C104 214 106 190 112 168 Z',B)+
+ f('M76 94 C96 84 132 84 152 94 L148 128 C144 150 130 162 112 166 C96 162 82 150 78 128 Z',B)+
+ f('M114 86 C132 86 146 90 152 94 L148 128 C144 150 130 162 112 166 Z',S)+
+ f('M78 100 C84 92 94 88 102 87 L98 100 C94 114 94 132 98 146 L92 140 C84 128 78 114 78 100 Z',H)+
+ s('M82 106 C94 116 106 118 112 114',L,1.8)+s('M142 106 C130 116 118 118 112 114',L,1.8)+
+ s('M112 118 V160',L,1.8)+s('M100 128 H124',L,1.6)+s('M102 140 H122',L,1.6)+s('M104 150 H120',L,1.6)+
+ f('M152 94 C162 98 166 108 162 116 C158 122 150 122 146 116 L144 100 Z',S)+
+ f('M76 94 C66 98 62 108 66 116 C70 122 78 122 82 116 L84 100 Z',B)+
+ f('M106 74 L102 92 L130 92 L126 72 Z',B)+
+ f('M118 74 L130 92 L122 92 Z',S)+
+ f('M116 20 C102 20 94 30 94 42 L94 50 C94 56 96 60 100 64 L106 72 L116 76 C128 76 136 68 138 56 L138 38 C138 28 128 20 116 20 Z',B)+
+ f('M116 20 C128 20 138 28 138 38 L138 56 C136 68 128 76 116 76 Z',S)+
+ s('M100 62 L108 70 L118 72','#0a0f16',2)+
+ s('M94 42 C94 30 102 20 116 20','#7bb5ff',2.5)+
+ s('M76 94 C66 98 62 108 66 116','#7bb5ff',2.5)+
+ s('M78 128 C82 148 94 160 108 165','#7bb5ff',2.5)+
+ '</g><g id="axArmSlot"></g>';
+var ARMIN=
+ f('M84 98 C72 104 64 112 62 122 C60 130 64 136 70 136 L78 130 C76 122 80 112 88 106 Z',B)+
+ f('M62 122 C60 130 64 136 70 136 L74 132 C68 130 64 126 64 120 Z',S)+
+ f('M66 132 C58 120 54 108 54 98 L64 94 C66 106 70 118 76 128 Z',B)+
+ f('M50 92 C48 84 52 78 58 78 C64 78 68 84 66 92 Z',B)+
+ f('M52 80 L48 66 L52 64 L56 78 Z',B)+
+ f('M58 78 L56 62 L60 62 L62 78 Z',B)+
+ f('M64 78 L66 64 L70 66 L68 80 Z',B)+
+ f('M50 88 L40 84 L42 80 L52 84 Z',B)+
+ s('M50 92 C48 84 52 78 58 78','#00c2d6',2);
+var ANIM='<svg viewBox="0 0 220 240">'+BODY+'</svg>';
+var ANIM_FULL='<svg viewBox="0 0 220 240">'+BODY.replace('<g id="axArmSlot"></g>','<g style="transform-box:view-box;transform-origin:84px 104px"><g>'+ARMIN+'</g></g>')+'</svg>';
+var st=document.createElement('style');
+st.textContent='#axBuddy{width:calc(46vh * .92);height:46vh}#axBuddy .fig path,#axHelpCard .av path{stroke-width:0}';
+document.head.appendChild(st);
+function mark(el){el.dataset.a38='1';el.dataset.g37='1';el.dataset.a39='1';el.dataset.a40='1';}
+function applyBuddy(){
+ var fig=document.querySelector('#axBuddy .fig');if(!fig)return;
+ var svg=fig.querySelector('svg');if(!svg||svg.dataset.a40)return;
+ var oldArm=svg.querySelector('#axArmP');
+ fig.innerHTML=ANIM;
+ var ns=fig.querySelector('svg');mark(ns);
+ if(oldArm){
+  oldArm.style.transformOrigin='84px 104px';
+  var inner=oldArm.querySelector('g');if(inner)inner.innerHTML=ARMIN;
+  var slot=ns.querySelector('#axArmSlot');
+  if(slot){slot.parentNode.insertBefore(oldArm,slot);slot.remove();}else ns.appendChild(oldArm);
+ }
+}
+function applyCard(){
+ document.querySelectorAll('#axHelpCard .av').forEach(function(av){
+  if(av.dataset.a40)return;mark(av);av.innerHTML=ANIM_FULL;
+  var s2=av.querySelector('svg');if(s2)mark(s2);
+ });
+}
+function loop(){applyBuddy();applyCard();}
+loop();setInterval(loop,1200);
+})();
