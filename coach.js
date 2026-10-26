@@ -1205,3 +1205,40 @@ function applyCard(){
 function loop(){applyBuddy();applyCard();}
 loop();setInterval(loop,1200);
 })();
+/* ===== AXIUM v44: ROBOT FIX + LIVING DETAILS ===== */
+(function(){
+if(window.__ax44)return;window.__ax44=true;
+var st=document.createElement('style');
+st.textContent='#axBuddy .glowC,#axHelpCard .glowC{animation:axGlow 2s ease-in-out infinite}#axBuddy .spinRing{animation:axSpin 3s linear infinite;transform-origin:100px 76px;transform-box:view-box}#axBuddy .scan{animation:axScan 2.2s ease-in-out infinite}#axBuddy .eyeB{animation:axBlink 4s infinite;transform-box:fill-box;transform-origin:center}@keyframes axGlow{0%,100%{opacity:1}50%{opacity:.5}}@keyframes axSpin{to{transform:rotate(360deg)}}@keyframes axScan{0%,100%{transform:translateX(0);opacity:.7}50%{transform:translateX(26px);opacity:.25}}@keyframes axBlink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.15)}}';
+document.head.appendChild(st);
+function fixSvg(svg){
+ if(!svg||svg.dataset.f44)return;svg.dataset.f44='1';
+ svg.querySelectorAll('path').forEach(function(p){
+  var f=p.getAttribute('fill'),s=p.getAttribute('stroke'),w=p.getAttribute('stroke-width');
+  if(f){p.style.fill=f;p.removeAttribute('fill');}
+  if(s){p.style.stroke=s;p.style.strokeWidth=(w||2);p.style.strokeLinecap='round';p.removeAttribute('stroke');p.removeAttribute('stroke-width');}
+  if(!f&&!s)p.style.fill='none';
+ });
+ if(!svg.dataset.x44){
+  svg.dataset.x44='1';
+  var NS='http://www.w3.org/2000/svg';
+  var ring=document.createElementNS(NS,'circle');
+  ring.setAttribute('cx','100');ring.setAttribute('cy','76');ring.setAttribute('r','13');
+  ring.setAttribute('class','spinRing');
+  ring.style.cssText='fill:none;stroke:#00c2d6;stroke-width:1.6;stroke-dasharray:22 40;opacity:.8';
+  svg.appendChild(ring);
+  var scan=document.createElementNS(NS,'rect');
+  scan.setAttribute('x','84');scan.setAttribute('y','26');scan.setAttribute('width','6');scan.setAttribute('height','10');scan.setAttribute('rx','3');
+  scan.setAttribute('class','scan');
+  scan.style.cssText='fill:rgba(255,255,255,.55)';
+  svg.appendChild(scan);
+  svg.querySelectorAll('circle').forEach(function(c){
+   if(c.getAttribute('r')==='2.6')c.setAttribute('class','eyeB');
+  });
+ }
+}
+function loop(){
+ document.querySelectorAll('#axBuddy .fig svg, #axHelpCard .av svg').forEach(fixSvg);
+}
+loop();setInterval(loop,1200);
+})();
