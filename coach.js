@@ -1242,3 +1242,70 @@ function loop(){
 }
 loop();setInterval(loop,1200);
 })();
+/* ===== AXIUM v45: SIMPLE LIVING ROBOT ===== */
+(function(){
+if(window.__ax45)return;window.__ax45=true;
+var ROB='<svg viewBox="0 0 200 240">'+
+'<rect x="98" y="6" width="4" height="10" rx="2" style="fill:#7bb5ff"/>'+
+'<circle cx="100" cy="5" r="4" class="rAnt" style="fill:#00c2d6"/>'+
+'<rect x="76" y="14" width="48" height="34" rx="12" style="fill:#1b2432;stroke:#2b7dff;stroke-width:1.5"/>'+
+'<rect x="82" y="24" width="36" height="14" rx="7" style="fill:#06202a"/>'+
+'<rect x="84" y="26" width="32" height="10" rx="5" style="fill:#00c2d6;opacity:.85"/>'+
+'<rect x="84" y="26" width="6" height="10" rx="3" class="rScan" style="fill:rgba(255,255,255,.55)"/>'+
+'<circle cx="92" cy="31" r="2.6" class="rEye" style="fill:#eaffff"/>'+
+'<circle cx="108" cy="31" r="2.6" class="rEye" style="fill:#eaffff"/>'+
+'<rect x="70" y="26" width="6" height="12" rx="3" style="fill:#2b7dff"/>'+
+'<rect x="124" y="26" width="6" height="12" rx="3" style="fill:#2b7dff"/>'+
+'<rect x="92" y="48" width="16" height="10" rx="4" style="fill:#141b26"/>'+
+'<circle cx="64" cy="64" r="13" style="fill:#22304a;stroke:#00c2d6;stroke-width:1.5"/>'+
+'<circle cx="136" cy="64" r="13" style="fill:#22304a;stroke:#00c2d6;stroke-width:1.5"/>'+
+'<rect x="72" y="56" width="56" height="56" rx="14" style="fill:#1b2432;stroke:#2b7dff;stroke-width:1.5"/>'+
+'<rect x="80" y="62" width="40" height="14" rx="7" style="fill:#22304a"/>'+
+'<circle cx="100" cy="84" r="9" style="fill:#06202a"/>'+
+'<circle cx="100" cy="84" r="6" class="rCore" style="fill:#00c2d6"/>'+
+'<circle cx="100" cy="84" r="2.4" style="fill:#eaffff"/>'+
+'<rect x="84" y="98" width="32" height="10" rx="5" style="fill:#141b26"/>'+
+'<rect x="76" y="112" width="48" height="10" rx="5" style="fill:#22304a"/>'+
+'<g class="rArmL"><rect x="40" y="60" width="14" height="40" rx="7" transform="rotate(18 47 62)" style="fill:#1b2432;stroke:#2b7dff;stroke-width:1.2"/><circle cx="40" cy="52" r="8" style="fill:#22304a"/><circle cx="34" cy="44" r="3" style="fill:#22304a"/><circle cx="40" cy="41" r="3" style="fill:#22304a"/><circle cx="46" cy="43" r="3" style="fill:#22304a"/><circle cx="50" cy="48" r="3" style="fill:#22304a"/></g>'+
+'<rect x="146" y="60" width="14" height="40" rx="7" transform="rotate(-14 153 62)" style="fill:#1b2432;stroke:#2b7dff;stroke-width:1.2"/>'+
+'<circle cx="152" cy="102" r="7" style="fill:#22304a"/>'+
+'<rect x="84" y="122" width="14" height="76" rx="7" style="fill:#1b2432;stroke:#2b7dff;stroke-width:1.2"/>'+
+'<rect x="102" y="122" width="14" height="76" rx="7" style="fill:#1b2432;stroke:#2b7dff;stroke-width:1.2"/>'+
+'<rect x="76" y="196" width="26" height="12" rx="6" style="fill:#2b7dff"/>'+
+'<rect x="98" y="196" width="26" height="12" rx="6" style="fill:#2b7dff"/>'+
+'</svg>';
+var st=document.createElement('style');
+st.textContent='#axBuddy{width:calc(46vh * .83);height:46vh}#axBuddy .rWrap,#axHelpCard .rWrap{width:100%;height:100%;transition:transform .5s cubic-bezier(.34,1.56,.64,1)}#axBuddy .rEye{animation:ax45blink 4s infinite;transform-box:fill-box;transform-origin:center}#axBuddy .rCore,#axBuddy .rAnt{animation:ax45glow 1.8s ease-in-out infinite}#axBuddy .rScan{animation:ax45scan 2.4s ease-in-out infinite}#axBuddy .rArmL{animation:ax45wave 2.6s ease-in-out infinite;transform-box:view-box;transform-origin:52px 66px}@keyframes ax45blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.15)}}@keyframes ax45glow{0%,100%{opacity:1}50%{opacity:.45}}@keyframes ax45scan{0%,100%{transform:translateX(0);opacity:.7}50%{transform:translateX(26px);opacity:.25}}@keyframes ax45wave{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-12deg)}}';
+document.head.appendChild(st);
+function mark(el){['a38','g37','a39','a40','a41','a42','a43','f44','x44','a45'].forEach(function(k){el.dataset[k]='1';});}
+function wrapIt(){return '<div class="rWrap">'+ROB+'</div>';}
+function applyBuddy(){
+ var fig=document.querySelector('#axBuddy .fig');if(!fig)return;
+ if(fig.querySelector('.rWrap'))return;
+ var svg=fig.querySelector('svg');if(svg&&svg.dataset.a45)return;
+ fig.innerHTML=wrapIt();
+ mark(fig.querySelector('svg'));
+ var spot=document.getElementById('axSpot');
+ if(spot&&!spot.dataset.g45){
+  spot.dataset.g45='1';
+  new MutationObserver(function(){
+   var w=fig.querySelector('.rWrap');if(!w)return;
+   var r=spot.getBoundingClientRect();if(!r.width)return;
+   var b=document.getElementById('axBuddy').getBoundingClientRect();
+   var dx=(r.left+r.width/2)-(b.left+b.width/2);
+   var flip=dx>0;
+   var rot=Math.max(-10,Math.min(10,dx/40));
+   w.style.transform='scaleX('+(flip?-1:1)+') rotate('+(flip?rot:-rot)+'deg)';
+  }).observe(spot,{attributes:true,attributeFilter:['style']});
+ }
+}
+function applyCard(){
+ document.querySelectorAll('#axHelpCard .av').forEach(function(av){
+  if(av.dataset.a45)return;mark(av);
+  av.innerHTML=wrapIt();
+  mark(av.querySelector('svg'));
+ });
+}
+function loop(){applyBuddy();applyCard();}
+loop();setInterval(loop,1200);
+})();
