@@ -1309,3 +1309,10 @@ function applyCard(){
 function loop(){applyBuddy();applyCard();}
 loop();setInterval(loop,1200);
 })();
+/* ===== AXIUM v46: REMOVE CHARACTER ===== */
+(function(){
+if(window.__ax46)return;window.__ax46=true;
+var st=document.createElement('style');
+st.textContent='#axBuddy{display:none!important}.axGhost{display:none!important}body>i[style*="axPartFly"]{display:none!important}#axHelpCard .av{display:none!important}';
+document.head.appendChild(st);
+})();
