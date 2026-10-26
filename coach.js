@@ -1316,3 +1316,55 @@ var st=document.createElement('style');
 st.textContent='#axBuddy{display:none!important}.axGhost{display:none!important}body>i[style*="axPartFly"]{display:none!important}#axHelpCard .av{display:none!important}';
 document.head.appendChild(st);
 })();
+/* ===== AXIUM v47: WHAT-IS-AXIUM STORY PAGE ===== */
+(function(){
+if(window.__ax47)return;window.__ax47=true;
+var pg=document.createElement('div');pg.id='axAbout';
+pg.style.cssText='position:fixed;inset:0;z-index:100020;background:linear-gradient(170deg,#0b1220,#070b12);overflow-y:auto;display:none;-webkit-overflow-scrolling:touch';
+pg.innerHTML='<div class="abAura"></div><div class="abParts"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>'+
+'<button id="axAboutX" type="button" style="position:sticky;top:10px;margin:10px 0 0 12px;z-index:5;padding:9px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:rgba(13,20,34,.85);color:#9aa4b3;font-weight:800;cursor:pointer;backdrop-filter:blur(8px)">‹ Back</button>'+
+'<div class="abHero"><div class="abLogo">AXIUM</div><div class="abTag">YOUR SECOND BRAIN, ENGINEERED</div><p class="abSub">One calm home for your tasks, focus, energy and life — built on YOUR real data, not fake numbers.</p></div>'+
+'<section class="sec" data-r><h3>😵 The problem</h3><div class="cards3"><div class="pc">🧩 Scattered tools<span>5 apps, 0 clarity</span></div><div class="pc">🎭 Fake motivation<span>streaks & stats that lie</span></div><div class="pc">📢 Noise<span>endless meaningless pings</span></div></div></section>'+
+'<section class="sec" data-r><h3>💙 The AXIUM way</h3><div class="cards3"><div class="pc g">🏠 One home<span>tasks · focus · notes · coach</span></div><div class="pc g">📊 Real data<span>energy grows from YOUR work</span></div><div class="pc g">🌙 Calm coach<span>gentle check-ins, real reminders</span></div></div></section>'+
+'<section class="sec" data-r><h3>⚡ What you get</h3><div class="grid6"><div class="tl">📋 Tasks & Calendar</div><div class="tl">⏱ Focus Timer</div><div class="tl">🔔 Smart Coach</div><div class="tl">📈 Energy Analytics</div><div class="tl">📝 Notes & AI</div><div class="tl">📦 Offline App</div></div></section>'+
+'<section class="sec" data-r><h3>🧭 How it works</h3><div class="steps"><div class="stp"><b>1</b> Enter AXIUM</div><div class="stp"><b>2</b> Act — tasks & focus sessions</div><div class="stp"><b>3</b> Grow — energy, streak & insights</div></div></section>'+
+'<section class="sec" data-r><div class="priv">🔒 Your data never leaves this device.<br><span>No account · No cloud · Just you</span></div></section>'+
+'<div class="abCta" data-r><button id="axAboutEnter" type="button">➜ Enter AXIUM</button></div><div style="height:40px"></div>';
+document.body.appendChild(pg);
+var st=document.createElement('style');
+st.textContent='#axAbout .abAura{position:fixed;inset:-40%;background:linear-gradient(120deg,rgba(43,125,255,.14),rgba(0,194,214,.09),rgba(124,92,255,.12),rgba(43,125,255,.14));background-size:300% 300%;animation:ab47aur 14s linear infinite;filter:blur(50px);pointer-events:none}#axAbout .abParts{position:fixed;inset:0;pointer-events:none;overflow:hidden}#axAbout .abParts i{position:absolute;width:4px;height:4px;border-radius:50%;background:#9cc8ff;box-shadow:0 0 10px #9cc8ff;opacity:.5;animation:ab47float 7s ease-in-out infinite}#axAbout .abParts i:nth-child(1){left:10%;top:20%}#axAbout .abParts i:nth-child(2){left:80%;top:15%;animation-delay:1s}#axAbout .abParts i:nth-child(3){left:25%;top:55%;animation-delay:2s}#axAbout .abParts i:nth-child(4){left:70%;top:65%;animation-delay:3s}#axAbout .abParts i:nth-child(5){left:45%;top:35%;animation-delay:4s}#axAbout .abParts i:nth-child(6){left:90%;top:45%;animation-delay:1.5s}#axAbout .abParts i:nth-child(7){left:15%;top:80%;animation-delay:2.5s}#axAbout .abParts i:nth-child(8){left:60%;top:88%;animation-delay:3.5s}#axAbout .abHero{text-align:center;padding:30px 20px 10px;position:relative}#axAbout .abLogo{font-size:2.6rem;font-weight:900;letter-spacing:6px;background:linear-gradient(90deg,#fff,#7bb5ff,#00c2d6,#fff);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:ab47shine 4s linear infinite}#axAbout .abTag{color:#3fd67a;font-size:.68rem;font-weight:900;letter-spacing:3px;margin-top:6px}#axAbout .abSub{color:#9aa4b3;font-size:.82rem;line-height:1.8;margin:14px auto 0;max-width:420px}#axAbout .sec{padding:26px 18px;position:relative}#axAbout h3{color:#eef2f7;font-size:1rem;font-weight:900;letter-spacing:1px;margin-bottom:14px}#axAbout .cards3{display:flex;flex-direction:column;gap:10px}#axAbout .pc{background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:18px;padding:14px 16px;color:#ffb1b1;font-weight:800;font-size:.85rem}#axAbout .pc span{display:block;color:#8a94a3;font-size:.68rem;font-weight:600;margin-top:4px}#axAbout .pc.g{background:rgba(63,214,122,.08);border-color:rgba(63,214,122,.35);color:#7ae8b0}#axAbout .grid6{display:grid;grid-template-columns:1fr 1fr;gap:10px}#axAbout .tl{background:rgba(43,125,255,.08);border:1px solid rgba(43,125,255,.3);border-radius:16px;padding:14px 10px;text-align:center;color:#c5cfdb;font-size:.72rem;font-weight:800}#axAbout .steps{display:flex;flex-direction:column;gap:0;border-left:2px solid rgba(43,125,255,.4);margin-left:14px;padding-left:20px}#axAbout .stp{position:relative;padding:10px 0;color:#c5cfdb;font-size:.82rem;font-weight:700}#axAbout .stp b{position:absolute;left:-31px;top:8px;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#2b7dff,#00c2d6);color:#fff;font-size:.68rem;display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px rgba(43,125,255,.6)}#axAbout .priv{text-align:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:20px;color:#eef2f7;font-weight:800;font-size:.9rem;line-height:1.7}#axAbout .priv span{color:#8a94a3;font-size:.68rem;font-weight:600}#axAbout .abCta{text-align:center;padding:10px 20px 30px}#axAbout .abCta button{width:100%;max-width:420px;padding:16px;border:none;border-radius:18px;background:linear-gradient(135deg,#2b7dff,#1a6ae0);color:#fff;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 14px 36px rgba(43,125,255,.45);animation:ab47pulse 2.4s ease-out infinite}#axAbout [data-r]{opacity:0;transform:translateY(36px);transition:all .8s cubic-bezier(.22,1,.36,1)}#axAbout [data-r].in{opacity:1;transform:none}#axAbout .grid6 .tl,#axAbout .cards3 .pc{opacity:0;transform:translateY(24px) scale(.94);transition:all .6s cubic-bezier(.34,1.56,.64,1)}#axAbout .sec.in .tl,#axAbout .sec.in .pc{opacity:1;transform:none}#axAbout .sec.in .tl:nth-child(1),#axAbout .sec.in .pc:nth-child(1){transition-delay:.05s}#axAbout .sec.in .tl:nth-child(2),#axAbout .sec.in .pc:nth-child(2){transition-delay:.13s}#axAbout .sec.in .tl:nth-child(3),#axAbout .sec.in .pc:nth-child(3){transition-delay:.21s}#axAbout .sec.in .tl:nth-child(4){transition-delay:.29s}#axAbout .sec.in .tl:nth-child(5){transition-delay:.37s}#axAbout .sec.in .tl:nth-child(6){transition-delay:.45s}@keyframes ab47aur{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}@keyframes ab47shine{0%{background-position:0% 50%}100%{background-position:200% 50%}}@keyframes ab47float{0%,100%{transform:translateY(0)}50%{transform:translateY(-26px)}}@keyframes ab47pulse{0%,100%{box-shadow:0 14px 36px rgba(43,125,255,.45),0 0 0 0 rgba(43,125,255,.4)}50%{box-shadow:0 14px 36px rgba(43,125,255,.45),0 0 0 16px rgba(43,125,255,0)}}';
+document.head.appendChild(st);
+var io=null;
+function open(){
+ pg.style.display='block';pg.scrollTop=0;
+ pg.querySelectorAll('[data-r]').forEach(function(el){el.classList.remove('in');});
+ if(io)io.disconnect();
+ io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.18});
+ pg.querySelectorAll('[data-r]').forEach(function(el){io.observe(el);});
+ if(window.axSfx)window.axSfx('open');
+}
+function close(){pg.style.display='none';if(window.axSfx)window.axSfx('close');}
+pg.querySelector('#axAboutX').onclick=close;
+pg.querySelector('#axAboutEnter').onclick=function(){close();var e=document.getElementById('enter-dashboard');if(e)e.click();};
+function doors(){
+ var hero=document.getElementById('enter-dashboard');
+ if(hero&&!document.getElementById('axAboutBtn')){
+  var b=document.createElement('button');b.id='axAboutBtn';b.type='button';b.textContent='✨ What is AXIUM?';
+  b.style.cssText='display:block;margin:12px auto 0;padding:12px 22px;border-radius:999px;border:1px solid rgba(43,125,255,.5);background:rgba(43,125,255,.12);color:#7bb5ff;font-weight:800;font-size:.8rem;cursor:pointer';
+  hero.parentNode.insertBefore(b,hero.nextSibling);
+  b.onclick=open;
+ }
+ var dl=document.querySelector('.drawer-link');
+ if(dl&&!document.getElementById('axAboutDrawer')){
+  var a=dl.cloneNode(false);a.id='axAboutDrawer';a.className=dl.className;a.textContent='✨ About AXIUM';
+  dl.parentNode.insertBefore(a,dl.nextSibling);
+  a.onclick=open;
+ }
+ var hc=document.getElementById('axHelpCard');
+ if(hc&&!document.getElementById('axAboutSet')){
+  var s=document.createElement('button');s.id='axAboutSet';s.type='button';s.textContent='❓ What is AXIUM?';
+  hc.appendChild(s);s.onclick=open;
+ }
+}
+doors();setInterval(doors,1500);
+})();
