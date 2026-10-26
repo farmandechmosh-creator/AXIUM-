@@ -1368,3 +1368,50 @@ function doors(){
 }
 doors();setInterval(doors,1500);
 })();
+/* ===== AXIUM v48: TRUTH PASS (KPI FIX + SIM BADGE + ON-DEVICE LABEL) ===== */
+(function(){
+if(window.__ax48)return;window.__ax48=true;
+window.axSmartEnergy=function(){
+ var k=new Date().toISOString().slice(0,10),d={};
+ try{d=JSON.parse(localStorage.getItem('axium_daily'))||{}}catch(e){}
+ var day=d[k]||{},t=day.t||0,m=day.m||0;
+ if(!t&&!m)return 0;
+ return Math.min(100,30+t*6+Math.round(m/10));
+};
+function badge(){
+ var on=localStorage.getItem('axium_sim')==='1';
+ var el=document.getElementById('axSimBadge');
+ if(on&&!el){
+  el=document.createElement('div');el.id='axSimBadge';
+  el.style.cssText='position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:100030;padding:7px 16px;border-radius:999px;background:rgba(255,180,67,.15);border:1px solid rgba(255,180,67,.6);color:#ffb443;font-size:.66rem;font-weight:900;letter-spacing:1px;backdrop-filter:blur(8px)';
+  el.textContent='🧪 SIMULATED DATA — Settings → Restore real data';
+  document.body.appendChild(el);
+ }
+ if(!on&&el)el.remove();
+}
+badge();setInterval(badge,2000);
+function simHook(){
+ document.querySelectorAll('button,div,a').forEach(function(el){
+  if(el.dataset.s48)return;
+  var txt=(el.textContent||'').trim();
+  if(txt.indexOf('Simulate 30 days')===0||txt.indexOf('🧪 Simulate')>-1){
+   el.dataset.s48='1';
+   el.addEventListener('click',function(){setTimeout(function(){localStorage.setItem('axium_sim','1');badge();},80);});
+  }
+  if(txt.indexOf('Restore my real data')===0||txt.indexOf(' Restore')>-1){
+   el.dataset.s48='1';
+   el.addEventListener('click',function(){setTimeout(function(){localStorage.removeItem('axium_sim');badge();},80);});
+  }
+ });
+}
+simHook();setInterval(simHook,2000);
+function chip(){
+ var p=document.getElementById('axPanel');
+ if(!p||p.querySelector('.ax48chip'))return;
+ var c=document.createElement('div');c.className='ax48chip';
+ c.style.cssText='margin-top:10px;padding:8px 12px;border-radius:12px;background:rgba(63,214,122,.08);border:1px solid rgba(63,214,122,.3);color:#7ae8b0;font-size:.62rem;font-weight:800;text-align:center';
+ c.textContent='🔒 100% on-device coach — no cloud, no account, no tracking';
+ p.appendChild(c);
+}
+chip();setInterval(chip,2000);
+})();
