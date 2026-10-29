@@ -1415,3 +1415,27 @@ function chip(){
 }
 chip();setInterval(chip,2000);
 })();
+/* ===== AXIUM v49: SMART ABOUT CHIP ===== */
+(function(){
+if(window.__ax49)return;window.__ax49=true;
+function tick(){
+ var chip=document.getElementById('heroAbout');if(!chip)return;
+ var pill=null;
+ document.querySelectorAll('a,button').forEach(function(el){
+  if(el.id!=='heroAbout'&&(el.textContent||'').indexOf('What is AXIUM?')>-1&&el.closest('#hero'))pill=el;
+ });
+ var hero=document.getElementById('hero');
+ var dash=document.getElementById('dashboard');
+ var onHero=hero&&hero.getBoundingClientRect().height>0&&!(dash&&dash.classList.contains('active'));
+ if(onHero){
+  chip.style.top='10px';chip.style.bottom='auto';
+  var vis=false;
+  if(pill){var r=pill.getBoundingClientRect();vis=r.top<window.innerHeight&&r.bottom>0;}
+  chip.style.display=vis?'none':'block';
+ }else{
+  chip.style.display='block';
+  chip.style.top='auto';chip.style.bottom='88px';
+ }
+}
+tick();setInterval(tick,600);
+})();
