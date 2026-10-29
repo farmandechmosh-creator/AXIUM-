@@ -1497,3 +1497,12 @@ function hook(){
 }
 hook();setInterval(hook,1200);
 })();
+/* ===== AXIUM v52: CLEAN ABOUT BUTTON ===== */
+(function(){
+if(window.__ax52)return;window.__ax52=true;
+var st=document.createElement('style');
+st.textContent='#axRailAbout::before{display:none!important}#axRailAbout>*:not(.rail-icon):not(.rail-label){display:none!important}';
+document.head.appendChild(st);
+function t(){var b=document.getElementById('axRailAbout');if(b)b.classList.remove('active');}
+t();setInterval(t,1000);
+})();
