@@ -1506,3 +1506,10 @@ document.head.appendChild(st);
 function t(){var b=document.getElementById('axRailAbout');if(b)b.classList.remove('active');}
 t();setInterval(t,1000);
 })();
+/* ===== AXIUM v53: CLIP ABOUT BUTTON SWEEP ===== */
+(function(){
+if(window.__ax53)return;window.__ax53=true;
+var st=document.createElement('style');
+st.textContent='#axRailAbout{overflow:hidden}#axRailAbout::after{border-radius:inherit}';
+document.head.appendChild(st);
+})();
