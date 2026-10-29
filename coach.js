@@ -1439,3 +1439,35 @@ function tick(){
 }
 tick();setInterval(tick,600);
 })();
+/* ===== AXIUM v50: ABOUT RAIL BUTTON + NO FLOAT CHIP ===== */
+(function(){
+if(window.__ax50)return;window.__ax50=true;
+var st=document.createElement('style');
+st.textContent='#axRailAbout{position:relative;animation:ax50pop .7s cubic-bezier(.34,1.56,.64,1) both,ax50pulse 3.2s 1.2s ease-out infinite}#axRailAbout .rail-icon{color:#7bb5ff}#axRailAbout::before{content:"";position:absolute;inset:-3px;border-radius:16px;border:1px solid rgba(43,125,255,.55);opacity:0;animation:ax50ring 3.2s 1.2s ease-out infinite;pointer-events:none}@keyframes ax50pop{from{opacity:0;transform:scale(.4) translateY(14px)}60%{transform:scale(1.08)}to{opacity:1;transform:none}}@keyframes ax50pulse{0%,100%{box-shadow:0 0 0 0 rgba(43,125,255,0)}50%{box-shadow:0 0 18px 2px rgba(43,125,255,.35)}}@keyframes ax50ring{0%{transform:scale(.8);opacity:.8}70%,100%{transform:scale(1.25);opacity:0}}';
+document.head.appendChild(st);
+function tick(){
+ var dash=document.getElementById('dashboard');
+ var hero=document.getElementById('hero');
+ var onHero=hero&&hero.getBoundingClientRect().height>0&&!(dash&&dash.classList.contains('active'));
+ if(!onHero){var ch=document.getElementById('heroAbout');if(ch)ch.remove();}
+ if(onHero)return;
+ var rail=document.getElementById('rail');
+ if(!rail||document.getElementById('axRailAbout'))return;
+ var items=rail.querySelectorAll('.rail-item');
+ var set=items[items.length-1];
+ if(!set)return;
+ var b=set.cloneNode(true);b.id='axRailAbout';b.classList.remove('active');
+ ['data-page','data-id','data-target'].forEach(function(a){b.removeAttribute(a);});
+ var lab=b.querySelector('.rail-label');if(lab)lab.textContent='About';
+ var ic=b.querySelector('.rail-icon')||b;
+ ic.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px"><path d="M12 3l1.8 4.6L18 9.4l-4.2 1.8L12 16l-1.8-4.8L6 9.4l4.2-1.8z"/><path d="M19 15l.9 2.3L22 18.2l-2.1.9L19 21.5l-.9-2.4-2.1-.9 2.1-.9z"/></svg>';
+ b.addEventListener('click',function(e){
+  e.stopPropagation();
+  var t=document.getElementById('axAboutSet')||document.getElementById('axAboutDrawer');
+  if(t)t.click();else location.href='about.html';
+  if(window.axSfx)window.axSfx('open');
+ });
+ rail.appendChild(b);
+}
+tick();setInterval(tick,1200);
+})();
