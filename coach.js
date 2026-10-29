@@ -1513,3 +1513,17 @@ var st=document.createElement('style');
 st.textContent='#axRailAbout{overflow:hidden}#axRailAbout::after{border-radius:inherit}';
 document.head.appendChild(st);
 })();
+/* ===== AXIUM v54: PLAIN ABOUT BUTTON ===== */
+(function(){
+if(window.__ax54)return;window.__ax54=true;
+var st=document.createElement('style');
+st.textContent='#axRailAbout{animation:none!important;overflow:visible}#axRailAbout::before,#axRailAbout::after{content:none!important;display:none!important}#axRailAbout .rail-icon svg{animation:none!important;filter:none}';
+document.head.appendChild(st);
+function fix(){
+ var b=document.getElementById('axRailAbout');if(!b)return;
+ if(b.dataset.v54)return;b.dataset.v54='1';b.dataset.p51='1';
+ var SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px"><path d="M12 3l1.8 4.6L18 9.4l-4.2 1.8L12 16l-1.8-4.8L6 9.4l4.2-1.8z"/><path d="M19 15l.9 2.3L22 18.2l-2.1.9L19 21.5l-.9-2.4l-2.1-.9 2.1-.9z"/></svg>';
+ b.innerHTML='<span class="rail-icon" style="display:flex;align-items:center;justify-content:center">'+SVG+'</span><span class="rail-label">About</span>';
+}
+fix();setInterval(fix,1200);
+})();
