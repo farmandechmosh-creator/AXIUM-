@@ -1471,3 +1471,29 @@ function tick(){
 }
 tick();setInterval(tick,1200);
 })();
+/* ===== AXIUM v51: ABOUT BUTTON MOTION OVERDRIVE ===== */
+(function(){
+if(window.__ax51)return;window.__ax51=true;
+var st=document.createElement('style');
+st.textContent='#axRailAbout{animation:ax51in .9s cubic-bezier(.34,1.56,.64,1) both,ax51float 3.4s 1s ease-in-out infinite,ax51glow 2.2s 1s ease-out infinite}#axRailAbout::before{animation:ax51ring 2.2s 1s ease-out infinite}#axRailAbout::after{content:"";position:absolute;top:0;left:-60%;width:45%;height:100%;background:linear-gradient(100deg,transparent,rgba(123,181,255,.4),transparent);transform:skewX(-20deg);animation:ax51sweep 2.8s 1.4s ease-in-out infinite;pointer-events:none}#axRailAbout .rail-icon svg{animation:ax51tw 1.8s ease-in-out infinite;filter:drop-shadow(0 0 6px rgba(123,181,255,.8))}@keyframes ax51in{0%{opacity:0;transform:scale(.15) rotate(-16deg)}55%{opacity:1;transform:scale(1.18) rotate(4deg)}75%{transform:scale(.94)}100%{opacity:1;transform:scale(1)}}@keyframes ax51float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}@keyframes ax51glow{0%,100%{box-shadow:0 0 6px 0 rgba(43,125,255,.25)}50%{box-shadow:0 0 22px 4px rgba(43,125,255,.5)}}@keyframes ax51ring{0%{transform:scale(.75);opacity:.9}80%,100%{transform:scale(1.35);opacity:0}}@keyframes ax51sweep{0%{left:-60%}55%,100%{left:120%}}@keyframes ax51tw{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}@keyframes ax51rise{0%{opacity:0;transform:translate(0,0) scale(.6)}25%{opacity:1}100%{opacity:0;transform:translate(var(--rx),-46px) scale(.2)}}';
+document.head.appendChild(st);
+function spark(b,n,radial){
+ for(var i=0;i<(n||1);i++){
+  var r=b.getBoundingClientRect();
+  var s=document.createElement('i');
+  var x=r.left+r.width/2+(radial?(Math.random()-.5)*40:0);
+  var y=r.top+r.height/2+(radial?(Math.random()-.5)*20:0);
+  s.style.cssText='position:fixed;z-index:99990;left:'+x+'px;top:'+y+'px;width:5px;height:5px;border-radius:50%;background:#9cc8ff;box-shadow:0 0 10px #9cc8ff;pointer-events:none;--rx:'+((Math.random()-.5)*30)+'px;animation:ax51rise '+(radial?0.7:1.3)+'s ease-out forwards';
+  document.body.appendChild(s);
+  setTimeout(function(el){return function(){el.remove();};}(s),1500);
+ }
+}
+function hook(){
+ var b=document.getElementById('axRailAbout');
+ if(!b||b.dataset.p51)return;
+ b.dataset.p51='1';
+ setInterval(function(){var bb=document.getElementById('axRailAbout');if(bb&&bb.getBoundingClientRect().width)spark(bb,1,false);},1600);
+ b.addEventListener('click',function(){spark(b,10,true);});
+}
+hook();setInterval(hook,1200);
+})();
