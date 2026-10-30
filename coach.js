@@ -1527,3 +1527,59 @@ function fix(){
 }
 fix();setInterval(fix,1200);
 })();
+/* ===== AXIUM v55: TRUST PASS (CTA + HONEST EMPTY STATE + PRIVACY + A11Y) ===== */
+(function(){
+if(window.__ax55)return;window.__ax55=true;
+function cta(){
+ document.querySelectorAll('*').forEach(function(el){
+  if(el.dataset.c55)return;
+  var t=(el.textContent||'').trim();
+  if(t==='Begin your journey with AXIUM'){el.dataset.c55='1';el.textContent='No account · No cloud · Ready in 10 seconds';}
+  else if(t==='Get Started'){el.dataset.c55='1';el.textContent='Enter AXIUM free';}
+ });
+}
+cta();setInterval(cta,2500);
+function emptyCard(){
+ if(localStorage.getItem('ax55dis')==='1')return;
+ var dash=document.getElementById('dashboard');
+ if(!dash||!dash.classList.contains('active'))return;
+ if(document.getElementById('ax55card'))return;
+ var t=[];try{t=JSON.parse(localStorage.getItem('axium_tasks'))||[]}catch(e){}
+ var min=parseInt(localStorage.getItem('axium_minutes')||'0',10)||0;
+ var done=t.filter(function(x){return x.done;}).length;
+ if(done||min)return;
+ var c=document.createElement('div');c.id='ax55card';
+ c.style.cssText='margin:12px 14px;padding:14px 16px;border-radius:16px;background:rgba(43,125,255,.08);border:1px solid rgba(43,125,255,.35);color:#c5cfdb;font-size:.75rem;line-height:1.7;position:relative;animation:ax55in .6s cubic-bezier(.34,1.56,.64,1) both';
+ c.innerHTML='<b style="color:#7bb5ff">This dashboard is 100% real.</b><br>Numbers here grow only from YOUR tasks and focus sessions — nothing is faked. Complete your first task to see it come alive.<button id="ax55x" type="button" aria-label="Dismiss" style="position:absolute;top:8px;right:10px;border:none;background:none;color:#5b6472;cursor:pointer;font-size:.85rem;padding:6px">✕</button>';
+ dash.insertBefore(c,dash.children[1]||null);
+ c.querySelector('#ax55x').onclick=function(){localStorage.setItem('ax55dis','1');c.remove();};
+}
+emptyCard();setInterval(emptyCard,2000);
+function priv(){
+ var set=document.getElementById('axSetPage');
+ if(set&&!set.querySelector('#ax55priv')){
+  var a=document.createElement('a');a.id='ax55priv';a.href='privacy.html';
+  a.style.cssText='display:block;margin:10px 14px;padding:13px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#9aa4b3;font-size:.72rem;font-weight:700;text-decoration:none;text-align:center';
+  a.textContent='Privacy policy — readable, real, accessible';
+  set.appendChild(a);
+ }
+ var ov=document.querySelector('#axAbout .priv');
+ if(ov&&!ov.querySelector('a')){
+  var l=document.createElement('a');l.href='privacy.html';
+  l.style.cssText='display:inline-block;margin-top:10px;color:#7bb5ff;font-size:.7rem;font-weight:800;text-decoration:none';
+  l.textContent='Read the privacy policy';
+  ov.appendChild(l);
+ }
+}
+priv();setInterval(priv,2000);
+var st=document.createElement('style');
+st.textContent='@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}:focus-visible{outline:2px solid #7bb5ff;outline-offset:2px}.axn-chip,.qa-chip,#axPanel .ax23chips button{min-height:44px}@keyframes ax55in{from{opacity:0;transform:translateY(18px) scale(.95)}to{opacity:1;transform:none}}';
+document.head.appendChild(st);
+document.addEventListener('keydown',function(e){
+ if(e.key!=='Escape')return;
+ var s1=document.getElementById('axSheet');if(s1){s1.classList.remove('open');s1.style.display='none';}
+ var s2=document.getElementById('axAcctSheet26');if(s2)s2.style.display='none';
+ var s3=document.getElementById('axAbout');if(s3)s3.style.display='none';
+ var p=document.getElementById('axPanel');if(p)p.classList.remove('open');
+});
+})();
