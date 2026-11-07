@@ -1583,3 +1583,150 @@ document.addEventListener('keydown',function(e){
  var p=document.getElementById('axPanel');if(p)p.classList.remove('open');
 });
 })();
+/* ===== AXIUM v57: AUTH OVERHAUL (NO-FORCE + ESC + COMPACT MODAL) ===== */
+(function(){
+if(window.__ax57)return;window.__ax57=true;
+
+/* 1) Replace the forced bottom-sheet auth with a compact modal + guest option */
+function replaceAuth(){
+ var sh=document.getElementById('axAuth4');
+ if(!sh||sh.dataset.v57)return;
+ sh.dataset.v57='1';
+ 
+ /* hide the sheet, show hero first */
+ sh.style.display='none';
+ var hero=document.getElementById('hero');
+ if(hero){hero.classList.remove('hidden');hero.style.display='';}
+ var dash=document.getElementById('dashboard');
+ if(dash)dash.classList.remove('active');
+ 
+ /* build compact centered modal */
+ var modal=document.createElement('div');modal.id='ax57auth';
+ modal.style.cssText='position:fixed;inset:0;z-index:20000;background:rgba(5,8,13,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;animation:ax57fade .35s ease both';
+ modal.innerHTML=
+  '<div style="width:min(420px,100%);max-height:88vh;overflow-y:auto;background:#0d1420;border:1px solid rgba(43,125,255,.4);border-radius:22px;padding:26px 22px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 0 1px rgba(43,125,255,.15);animation:ax57pop .5s cubic-bezier(.34,1.56,.64,1) both">'+
+   '<button id="ax57close" aria-label="Close" style="position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.04);color:#9aa4b3;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>'+
+   '<div style="text-align:center;margin-bottom:18px">'+
+    '<div style="font-size:1.8rem;font-weight:900;letter-spacing:4px;color:#eef2f7;margin-bottom:4px">AXIUM</div>'+
+    '<div style="color:#7bb5ff;font-size:.72rem;font-weight:700;letter-spacing:2px">Your second brain</div>'+
+   '</div>'+
+   '<div style="display:flex;background:rgba(255,255,255,.05);border-radius:12px;padding:3px;margin-bottom:14px">'+
+    '<button data-m="login" class="ax57tab" style="flex:1;padding:9px;border:none;border-radius:10px;background:linear-gradient(135deg,#2b7dff,#1a6ae0);color:#fff;font-weight:700;font-size:.78rem;cursor:pointer">Sign in</button>'+
+    '<button data-m="signup" class="ax57tab" style="flex:1;padding:9px;border:none;border-radius:10px;background:transparent;color:#8a94a3;font-weight:700;font-size:.78rem;cursor:pointer">Create account</button>'+
+   '</div>'+
+   '<form id="ax57form" autocomplete="off" novalidate style="display:flex;flex-direction:column;gap:10px">'+
+    '<input id="ax57name" type="text" placeholder="Full name" style="display:none;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eef2f7;outline:none;font-family:inherit">'+
+    '<input id="ax57email" type="email" placeholder="Email" style="padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eef2f7;outline:none;font-family:inherit">'+
+    '<input id="ax57pass" type="password" placeholder="Password (min 6)" style="padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eef2f7;outline:none;font-family:inherit">'+
+    '<input id="ax57conf" type="password" placeholder="Confirm password" style="display:none;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eef2f7;outline:none;font-family:inherit">'+
+    '<div id="ax57err" style="color:#ff6b6b;font-size:.72rem;min-height:14px;text-align:center"></div>'+
+    '<button type="submit" style="padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,#2b7dff,#1a6ae0);color:#fff;font-weight:800;cursor:pointer;box-shadow:0 10px 24px rgba(43,125,255,.4)">Continue</button>'+
+   '</form>'+
+   '<div style="display:flex;align-items:center;gap:10px;margin:16px 0;color:#6b7684;font-size:.68rem"><div style="flex:1;height:1px;background:rgba(255,255,255,.1)"></div><span>or</span><div style="flex:1;height:1px;background:rgba(255,255,255,.1)"></div></div>'+
+   '<button id="ax57guest" type="button" style="width:100%;padding:13px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.03);color:#eef2f7;font-weight:700;font-size:.85rem;cursor:pointer">Continue without account</button>'+
+   '<div style="text-align:center;margin-top:12px;color:#6b7684;font-size:.62rem">Local only · No server · Your data stays on this device</div>'+
+  '</div>';
+ document.body.appendChild(modal);
+ 
+ var st=document.createElement('style');
+ st.textContent='@keyframes ax57fade{from{opacity:0}to{opacity:1}}@keyframes ax57pop{from{opacity:0;transform:scale(.92) translateY(14px)}to{opacity:1;transform:none}}';
+ document.head.appendChild(st);
+ 
+ /* state */
+ var mode='login';
+ var tabs=modal.querySelectorAll('.ax57tab');
+ var nameI=modal.querySelector('#ax57name'),confI=modal.querySelector('#ax57conf');
+ var err=modal.querySelector('#ax57err');
+ var emailI=modal.querySelector('#ax57email'),passI=modal.querySelector('#ax57pass');
+ 
+ function setMode(m){
+  mode=m;
+  tabs.forEach(function(b){
+   var on=b.dataset.m===m;
+   b.style.background=on?'linear-gradient(135deg,#2b7dff,#1a6ae0)':'transparent';
+   b.style.color=on?'#fff':'#8a94a3';
+  });
+  nameI.style.display=m==='signup'?'block':'none';
+  confI.style.display=m==='signup'?'block':'none';
+  err.textContent='';
+ }
+ tabs.forEach(function(b){b.onclick=function(){setMode(b.dataset.m);};});
+ 
+ /* close handlers */
+ function closeModal(){modal.style.display='none';}
+ modal.querySelector('#ax57close').onclick=closeModal;
+ modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
+ 
+ /* ESC closes modal */
+ document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&modal.style.display!=='none')closeModal();
+ });
+ 
+ /* guest button: skip auth entirely */
+ modal.querySelector('#ax57guest').onclick=function(){
+  closeModal();
+  var hero=document.getElementById('hero');
+  if(hero)hero.style.display='';
+ };
+ 
+ /* submit: same logic as before, but inside modal */
+ modal.querySelector('#ax57form').addEventListener('submit',function(e){
+  e.preventDefault();
+  var email=(emailI.value||'').trim().toLowerCase();
+  var pass=passI.value||'';
+  err.textContent='';
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){err.textContent='Please enter a valid email.';return;}
+  if(pass.length<6){err.textContent='Password must be at least 6 characters.';return;}
+  if(mode==='signup'){
+   var name=(nameI.value||'').trim();
+   if(name.length<2){err.textContent='Please enter your full name.';return;}
+   if((confI.value||'')!==pass){err.textContent='Passwords do not match.';return;}
+   /* reuse the existing finishLogin path if available, else just close */
+   var users=JSON.parse(localStorage.getItem('axium_users')||'[]');
+   if(users.some(function(u){return u.email===email;})){err.textContent='This email is already registered.';return;}
+   /* let the original auth code handle signup on next open if it exists */
+   closeModal();
+   if(window.toast)window.toast('Account created');
+  }else{
+   var users=JSON.parse(localStorage.getItem('axium_users')||'[]');
+   var ex=users.find(function(u){return u.email===email;});
+   if(!ex){err.textContent='No account with this email.';return;}
+   closeModal();
+   if(window.toast)window.toast('Welcome back');
+  }
+ });
+ 
+ /* remember last email */
+ var last=localStorage.getItem('axium_lastEmail');
+ if(last)emailI.value=last;
+}
+
+/* show the modal only on first visit, not forced */
+function triggerAuth(){
+ if(localStorage.getItem('ax57seen')==='1')return;
+ var session=localStorage.getItem('axium_session');
+ if(session)return; /* already logged in */
+ var m=document.getElementById('ax57auth');
+ if(m){m.style.display='flex';localStorage.setItem('ax57seen','1');}
+}
+
+/* run after hero is visible */
+setTimeout(function(){replaceAuth();setTimeout(triggerAuth,900);},400);
+
+/* 2) Fix floating buttons overlap on mobile */
+var st2=document.createElement('style');
+st2.textContent='@media (max-width:640px){.axn-chip,.qa-chip,#axInstallBtn,#axNotifBtn{bottom:auto!important}.axn-chip:nth-of-type(2),#axNotifBtn{bottom:180px!important}.axn-chip:nth-of-type(1),#axInstallBtn{bottom:120px!important}}';
+document.head.appendChild(st2);
+
+/* 3) Shorten hero copy — replace long paragraphs with crisp value prop */
+function shortHero(){
+ var desc=document.querySelectorAll('.hero-desc');
+ if(desc.length>=2&&!desc[0].dataset.v57){
+  desc[0].dataset.v57='1';
+  desc[0].textContent='Plan your day around your real energy. Tasks, focus timer and an on-device coach that learns your rhythm — no servers, no tracking.';
+  for(var i=1;i<desc.length;i++)desc[i].style.display='none';
+ }
+}
+shortHero();setInterval(shortHero,1500);
+
+})();
