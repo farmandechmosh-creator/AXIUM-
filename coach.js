@@ -1777,3 +1777,50 @@ function fix(){
 }
 fix();setInterval(fix,1500);
 })();
+/* ===== AXIUM v60: HONEST INSTALL + XSS GUARD ===== */
+(function(){
+if(window.__ax60)return;window.__ax60=true;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();window.__axPrompt=e;});
+function honestInstall(){
+ var old=document.getElementById('ax60inst');if(old)old.remove();
+ var m=document.createElement('div');m.id='ax60inst';
+ m.style.cssText='position:fixed;inset:0;z-index:30000;background:rgba(5,8,13,.7);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px';
+ m.innerHTML='<div style="width:min(380px,100%);background:#0d1420;border:1px solid rgba(43,125,255,.4);border-radius:20px;padding:24px;text-align:center">'
+  +'<div style="font-size:1.4rem;font-weight:900;letter-spacing:2px;color:#eef2f7;margin-bottom:6px">Install AXIUM</div>'
+  +'<div style="color:#8a94a3;font-size:.75rem;line-height:1.6;margin-bottom:16px">Adds AXIUM to your home screen and lets it work offline. Everything stays on this device.</div>'
+  +'<div style="display:flex;flex-direction:column;gap:8px;text-align:left;color:#c5cfdb;font-size:.78rem;margin-bottom:18px">'
+  +'<div>· Tasks, focus timer, calendar, notes</div><div>· On-device smart coach</div><div>· No cloud account, no tracking</div></div>'
+  +'<button id="ax60yes" style="width:100%;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,#2b7dff,#1a6ae0);color:#fff;font-weight:800;cursor:pointer;margin-bottom:8px">Install</button>'
+  +'<button id="ax60no" style="width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:none;color:#9aa4b3;font-weight:700;cursor:pointer">Later</button>'
+  +'</div>';
+ document.body.appendChild(m);
+ m.querySelector('#ax60no').onclick=function(){m.remove();};
+ m.addEventListener('click',function(e){if(e.target===m)m.remove();};
+ m.querySelector('#ax60yes').onclick=function(){
+   if(window.__axPrompt){window.__axPrompt.prompt();m.remove();}
+   else{alert('Use your browser menu: Add to Home screen / Install app.');m.remove();}
+ };
+}
+document.addEventListener('click',function(e){
+ var t=e.target;if(!t||!t.closest)return;
+ var btn=t.closest('button,a');
+ if(btn&&/install/i.test(btn.textContent||'')){e.stopImmediatePropagation();e.preventDefault();honestInstall();}
+},true);
+function scrub(){
+ var bad=/50M\+|1,842,317|Editors|VERIFIED|Sara M|Arman K|downloads|reviews|4\.9|1,2\d\d today/i;
+ document.querySelectorAll('div,span,b,i,p,strong').forEach(function(n){
+   if(n.children.length===0&&bad.test(n.textContent||''))n.style.display='none';
+ });
+}
+setInterval(scrub,1200);
+var origSet=Storage.prototype.setItem;
+Storage.prototype.setItem=function(k,v){
+  try{
+    if(/axium_(accounts|users|prefs|profile)/i.test(k)){
+      var clean=function(x){if(typeof x==='string')return x.replace(/[<>]/g,'');if(Array.isArray(x))return x.map(clean);if(x&&typeof x==='object'){for(var key in x)x[key]=clean(x[key]);}return x;};
+      v=JSON.stringify(clean(JSON.parse(v)));
+    }
+  }catch(e){}
+  return origSet.call(this,k,v);
+};
+})();
