@@ -1753,3 +1753,27 @@ foot();setInterval(foot,2000);
 function nn(){var h=document.querySelector('#notif-panel .notif-header');if(!h||h.querySelector('.ax58nn'))return;var s=document.createElement('div');s.className='ax58nn';s.style.cssText='color:#6b7684;font-size:.6rem;font-weight:600;margin-top:2px';s.textContent='Local reminders work while AXIUM is open.';h.appendChild(s);}
 nn();setInterval(nn,2000);
 })();
+/* ===== AXIUM v59: LIVE HONESTY SWAPS ===== */
+(function(){
+if(window.__ax59)return;window.__ax59=true;
+function fix(){
+ var eb=document.querySelector('.eyebrow-badge');
+ if(eb&&eb.textContent.indexOf('AI-POWERED')>-1)eb.innerHTML='<span class="badge-dot"></span>ON-DEVICE SMART PRODUCTIVITY';
+ document.querySelectorAll('.feature h3').forEach(function(h){if(h.textContent.trim()==='Smart AI Assistant')h.textContent='On-device Smart Coach';});
+ document.querySelectorAll('.feature p').forEach(function(p){
+   if(p.textContent.indexOf('Intelligent insights')===0)p.textContent='Rule-based insights computed on your device from your real tasks and focus history — no cloud model, nothing sent.';
+   if(p.textContent.indexOf('Your data never leaves this device')===0)p.textContent='Your work data (tasks, notes, focus) never leaves this device. Only optional weather and account-email use the network.';
+ });
+ document.querySelectorAll('.hero-desc').forEach(function(p){if(p.textContent.indexOf('learns your patterns')>-1)p.textContent='AXIUM adapts to your natural rhythm and helps you achieve more with less stress — using only on-device rules.';});
+ var st=document.querySelector('.drawer-profile-info strong');if(st&&st.textContent==='Alireza')st.textContent='You';
+ var sp=document.querySelector('.drawer-profile-info span');if(sp&&sp.textContent==='Pro Plan')sp.textContent='Local-only';
+ var wc=document.querySelector('.wx-city');if(wc&&wc.textContent.indexOf('Tehran')>-1)wc.textContent='Your city · —';
+ var wt=document.querySelector('.wx-temp');if(wt&&wt.textContent==='24°')wt.textContent='—°';
+ document.querySelectorAll('.sec-title h3').forEach(function(h){if(h.textContent.trim()==='AI Insights')h.textContent='Coach Insights';});
+ document.querySelectorAll('.qa-chip').forEach(function(c){if(c.textContent.indexOf('AI Chat')>-1)c.innerHTML=c.innerHTML.replace('AI Chat','Smart Coach');});
+ document.querySelectorAll('.gc-count').forEach(function(g){if(g.textContent.indexOf('left')>-1)g.textContent='your tasks';});
+ document.querySelectorAll('.f-body b').forEach(function(b){if(b.textContent.indexOf('AI rescheduled')>-1)b.textContent=b.textContent.replace('AI rescheduled','Coach rescheduled');});
+ document.querySelectorAll('.ai-text').forEach(function(p){if(p.textContent.indexOf('energy peaks')>-1)p.textContent='Complete tasks and focus sessions to unlock personalized insights.';});
+}
+fix();setInterval(fix,1500);
+})();
