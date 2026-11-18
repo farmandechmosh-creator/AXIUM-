@@ -1730,3 +1730,26 @@ function shortHero(){
 shortHero();setInterval(shortHero,1500);
 
 })();
+/* ===== AXIUM v58: HONESTY PASS ===== */
+(function(){
+if(window.__ax58)return;window.__ax58=true;
+function rename(){var r=document.getElementById('set-restore');if(r){var s=r.querySelector('span');if(s&&s.textContent.indexOf('Restore my real')===0)s.textContent='Restore from backup';}}
+rename();setInterval(rename,2000);
+function remind(){
+ if(localStorage.getItem('ax58rem')==='1')return;
+ var has=Object.keys(localStorage).some(function(k){return k.indexOf('axium_')===0;});
+ if(!has)return;
+ if(document.getElementById('ax58rem'))return;
+ var d=document.getElementById('dashboard');if(!d||!d.classList.contains('active'))return;
+ var n=document.createElement('div');n.id='ax58rem';
+ n.style.cssText='margin:0 14px 12px;padding:10px 14px;border-radius:12px;background:rgba(255,180,67,.08);border:1px solid rgba(255,180,67,.3);color:#ffb443;font-size:.7rem;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:10px';
+ n.innerHTML='<span>Local data can be cleared by your browser. Keep a backup: Settings → Export my data.</span><button style="border:none;background:none;color:#ffb443;cursor:pointer;font-size:.9rem" aria-label="Dismiss">✕</button>';
+ d.insertBefore(n,d.children[2]||null);
+ n.querySelector('button').onclick=function(){localStorage.setItem('ax58rem','1');n.remove();};
+}
+remind();setInterval(remind,2500);
+function foot(){var p=document.getElementById('axPanel');if(!p||p.querySelector('.ax58foot'))return;var f=document.createElement('div');f.className='ax58foot';f.style.cssText='margin-top:8px;color:#6b7684;font-size:.6rem;text-align:center';f.textContent='On-device rules — not a cloud model. No data leaves your device.';p.appendChild(f);}
+foot();setInterval(foot,2000);
+function nn(){var h=document.querySelector('#notif-panel .notif-header');if(!h||h.querySelector('.ax58nn'))return;var s=document.createElement('div');s.className='ax58nn';s.style.cssText='color:#6b7684;font-size:.6rem;font-weight:600;margin-top:2px';s.textContent='Local reminders work while AXIUM is open.';h.appendChild(s);}
+nn();setInterval(nn,2000);
+})();
