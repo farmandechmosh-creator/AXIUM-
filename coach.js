@@ -1850,3 +1850,29 @@ function a11y(){
 }
 a11y();setInterval(a11y,2000);
 })();
+/* ===== AXIUM v61: MIGRATION + A11Y ===== */
+(function(){
+if(window.__ax61)return;window.__ax61=true;
+try{
+ if(localStorage.getItem('ax61mig')!=='1'){
+  ['axium_accounts','axium_users','axium_prefs','axium_profile'].forEach(function(k){
+   var raw=localStorage.getItem(k);if(!raw)return;
+   try{
+    var clean=function(x){if(typeof x==='string')return x.replace(/[<>]/g,'');if(Array.isArray(x))return x.map(clean);if(x&&typeof x==='object'){for(var key in x)x[key]=clean(x[key]);}return x;};
+    localStorage.setItem(k,JSON.stringify(clean(JSON.parse(raw))));
+   }catch(e){}
+  });
+  localStorage.setItem('ax61mig','1');
+ }
+}catch(e){}
+function a11y(){
+ document.querySelectorAll('button').forEach(function(b){
+  var t=(b.textContent||'').trim();
+  if((t==='✕'||t==='X'||t==='×')&&!b.getAttribute('aria-label'))b.setAttribute('aria-label','Close');
+ });
+ document.querySelectorAll('.axdlg .box,.xm .mm,#axCalV2Mo .mm,#axNCm .mm,.axsheet,#ax57auth > div').forEach(function(m){
+  if(!m.getAttribute('role'))m.setAttribute('role','dialog');
+ });
+}
+a11y();setInterval(a11y,2000);
+})();
