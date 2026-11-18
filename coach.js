@@ -1876,3 +1876,23 @@ function a11y(){
 }
 a11y();setInterval(a11y,2000);
 })();
+/* ===== AXIUM v62: BETA BADGE + HONESTY STRIP + FEEDBACK ===== */
+(function(){
+if(window.__ax62)return;window.__ax62=true;
+function badge(){
+ if(document.getElementById('ax62beta'))return;
+ var b=document.createElement('span');b.id='ax62beta';
+ b.textContent='BETA';
+ b.style.cssText='position:fixed;top:10px;right:12px;z-index:9990;padding:4px 10px;border-radius:999px;background:rgba(255,180,67,.15);border:1px solid rgba(255,180,67,.5);color:#ffb443;font-size:.6rem;font-weight:900;letter-spacing:2px;pointer-events:none';
+ document.body.appendChild(b);
+}
+function strip(){
+ if(document.getElementById('ax62strip'))return;
+ var d=document.getElementById('dashboard');if(!d||!d.classList.contains('active'))return;
+ var s=document.createElement('div');s.id='ax62strip';
+ s.style.cssText='margin:0 14px 12px;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:#8a94a3;font-size:.66rem;line-height:1.7';
+ s.innerHTML='Beta · Your data lives only in this browser · Reminders work while AXIUM is open · Your browser may clear storage, so export a backup from Settings · <a href="mailto:farmande.chmosh@gmail.com" style="color:#7bb5ff;font-weight:700;text-decoration:none">Send feedback</a> or <a href="https://github.com/farmandechmosh-creator/AXIUM-/issues" style="color:#7bb5ff;font-weight:700;text-decoration:none">open an issue</a>';
+ d.insertBefore(s,d.children[2]||null);
+}
+badge();strip();setInterval(function(){badge();strip();},2000);
+})();
